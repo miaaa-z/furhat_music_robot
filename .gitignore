@@ -1,0 +1,16 @@
+# ==================== Data Files ====================
+# Don't upload genres_original folder
+data/raw/genres_original/
+
+# exclude wav
+*.wav
+*.mp3
+
+# exclude zip
+*.zip
+
+# Exclude other GTZAN dataset files
+data/raw/Data/
+data/raw/images_original/
+data/raw/features_30_sec.csv
+data/raw/features_3_sec.csv
