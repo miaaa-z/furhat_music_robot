@@ -1,25 +1,21 @@
-# This week's goals
+## Weekly Progress
 
-## Goals
-1. Downloaded and processed GTZAN dataset (1,000 songs)
-2. Implemented audio feature extraction pipeline
-3. Reviewed literature to design movement table
-4. Designed rule-based mapping framework
+### Completed This Week
+- Watched and analyzed YouTube "first time listening" reaction videos for three songs:
+  - "Someone Like You" by Adele
+  - "Uptown Funk" by Mark Ronson ft. Bruno Mars
+  - "Back to Black" by Amy Winehouse
+- Completed CSV data recording of observed human reactions
+- Separated Furhat built-in skills from custom behaviors
+- Developed feature-based behavior definitions for baseline (using Librosa audio feature extraction)
 
-## Outcome
-1. **feature_extractor.py** - Reusable feature extraction module
-2. **gtzan_features.json** - Feature database (1,000 songs)
-3. **rule_based_design.md** - Mapping rules documentation
-4. **Visualization charts** - Tempo, energy, emotion distributions
+### Current Challenges
+- Missing parameters in Furhat SDK: MOUTH_POUT, NOSE_WRINKLE, LIP_BITE
+- These parameters not documented in official Furhat documentation
+- Baseline behavior definitions require further refinement
 
-## Key Features Extracted
-- Tempo (BPM)
-- Energy (RMS)
-- Spectral characteristics
-- Harmonic content (Chroma)
-- Timbral texture (MFCC)
-- Emotional dimensions (Valence/Arousal)
-
-
-## Next Week
-Implement RuleBasedMapper and integrate Furhat SDK.
+### Next Steps (Before Next Meeting (11th Dec))
+- Implement human-mimicking behaviors based on collected reaction data
+- Run and test baseline system with Librosa extracted audio features
+- Refine behavior definitions to improve mapping accuracy
+- Debug parameter limitations and find workarounds
