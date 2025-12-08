@@ -12,7 +12,6 @@ class CustomBehaviorTester:
         await self.furhat.connect()
         await self.furhat.request_voice_config(gender="female", language="en-US")
 
-
     async def custom_happy_intense(self, intensity=1.0):
         """Custom: Very happy"""
         params = {
@@ -205,8 +204,7 @@ class CustomBehaviorTester:
             await self.furhat.request_gesture_start("Roll", intensity=1.0, duration=0.3)
             await asyncio.sleep(0.4)
 
-
-    # ============ Shoulder Movements (Simulated with gestures) ============
+    # Shoulder Movements (Simulated with gestures)
     # Note: Furhat doesn't have shoulders, so we simulate with head/body language
 
     async def shoulder_shrug_both(self, intensity=0.8):
@@ -306,11 +304,11 @@ async def main():
     # await tester.furhat.request_speak_text("Testing both shoulders shrug", wait=True)
     # await tester.shoulder_shrug_both(intensity=0.8)
     #
-    await tester.furhat.request_speak_text("Testing left shoulder shrug", wait=True)
-    await tester.shoulder_shrug_one(side="left", intensity=0.8)
-
-    await tester.furhat.request_speak_text("Testing right shoulder shrug", wait=True)
-    await tester.shoulder_shrug_one(side="right", intensity=0.8)
+    # await tester.furhat.request_speak_text("Testing left shoulder shrug", wait=True)
+    # await tester.shoulder_shrug_one(side="left", intensity=0.8)
+    #
+    # await tester.furhat.request_speak_text("Testing right shoulder shrug", wait=True)
+    # await tester.shoulder_shrug_one(side="right", intensity=0.8)
 
 
     await tester.cleanup()
