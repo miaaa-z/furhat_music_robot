@@ -1,3 +1,9 @@
+"""
+someone like you
+(BPM): [135.99917763]
+The number of the beats: 608
+The time points of the first 10 beats）: [0.81269841 1.25387755 1.69505669 2.13623583 2.57741497 3.04181406
+ 3.4829932  3.92417234 4.36535147 4.82975057]"""
 import asyncio
 from test_built_in_behaviour import BuiltinGestureTester
 from test_custom_behaviour import CustomBehaviorTester

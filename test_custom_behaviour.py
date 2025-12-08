@@ -193,16 +193,16 @@ class CustomBehaviorTester:
         # Return to center
         await self.furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=True)
 
-    async def head_nod_fast(self, times=4):
+    async def head_nod_fast(self, times):
         for i in range(times):
-            await self.furhat.request_gesture_start("Nod", intensity=1.0, duration=0.3)
+            await self.furhat.request_gesture_start("Nod", intensity=0.8, duration=0.3)
             await asyncio.sleep(0.4)
 
-    async def head_shake_fast_horizontal(self, times=3):
-        # shaking head fast
+    async def head_sway(self, times):
         for i in range(times):
-            await self.furhat.request_gesture_start("Roll", intensity=1.0, duration=0.3)
-            await asyncio.sleep(0.4)
+            await self.furhat.request_gesture_start("Roll", intensity=0.7, duration=2)
+            await asyncio.sleep(3)
+            # duration is 1 second shorter than sleep time can make it always sway left to right
 
     # Shoulder Movements (Simulated with gestures)
     # Note: Furhat doesn't have shoulders, so we simulate with head/body language
@@ -298,7 +298,7 @@ async def main():
     # await tester.head_nod_fast(times=5)
     #
     # await tester.furhat.request_speak_text("Testing horizontal head shake", wait=True)
-    # await tester.head_shake_fast_horizontal(times=5)
+    await tester.head_sway(times=4)
 
     # # ===== Shoulder movements =====
     # await tester.furhat.request_speak_text("Testing both shoulders shrug", wait=True)
@@ -312,6 +312,7 @@ async def main():
 
 
     await tester.cleanup()
+
 
 
 if __name__ == "__main__":
