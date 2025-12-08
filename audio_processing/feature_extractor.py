@@ -2,7 +2,7 @@ import librosa
 import matplotlib.pyplot as plt
 
 
-audio_path = '/Users/miaaa/Desktop/music robot/3_songs_downloads/back_to_black.wav'  # 你需要确认一下具体文件名
+audio_path = '/Users/miaaa/Desktop/music robot/3_songs_downloads/back_to_black.wav'
 y, sr = librosa.load(audio_path)
 
 # beat tracking
