@@ -12,6 +12,10 @@ from test_custom_behaviour import CustomBehaviorTester
 class BackToBlackPerformance:
     """Furhat performance synchronized with 'Back to Black'"""
 
+    def print_current_behavior(self, start_sec, end_sec, source, method_name, params):
+        """Print current behavior information for video recording"""
+        print(f"[{start_sec:.1f}s-{end_sec:.1f}s] {source.upper()}: {method_name} {params}")
+
     def __init__(self, music_url):
         self.music_url = music_url
         self.builtin = BuiltinGestureTester()
@@ -112,7 +116,7 @@ class BackToBlackPerformance:
 
     async def perform(self):
         """Start synchronized performance"""
-        print("Starting Back to Black performance...")
+        print("\nStarting performance: Back to Black\n")
 
         # Start playing audio (non-blocking)
         try:
@@ -136,6 +140,9 @@ class BackToBlackPerformance:
             wait = start_sec - now
             if wait > 0:
                 await asyncio.sleep(wait)
+
+            # Print current behavior (this will show in terminal during recording)
+            self.print_current_behavior(start_sec, end_sec, source, method_name, params)
 
             # Execute gesture
             duration = end_sec - start_sec
@@ -164,14 +171,33 @@ class BackToBlackPerformance:
         if remaining > 0:
             await asyncio.sleep(remaining)
 
-        print("Performance complete!")
+        print("\nPerformance complete\n")
 
     async def cleanup(self):
         """Clean up connections"""
+        # Cancel all active tasks
         for task in self.active_tasks:
-            task.cancel()
-        await self.builtin.cleanup()
-        await self.custom.cleanup()
+            if not task.done():
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
+
+        # Try to cleanup connections with error handling
+        try:
+            await self.builtin.cleanup()
+        except RuntimeError as e:
+            print(f"Builtin cleanup note: {e}")
+        except Exception as e:
+            print(f"Builtin cleanup error: {e}")
+
+        try:
+            await self.custom.cleanup()
+        except RuntimeError as e:
+            print(f"Custom cleanup note: {e}")
+        except Exception as e:
+            print(f"Custom cleanup error: {e}")
 
 
 async def main():

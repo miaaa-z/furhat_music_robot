@@ -1,7 +1,6 @@
 from furhat_realtime_api import AsyncFurhatClient
 import asyncio
 
-
 class BuiltinGestureTester:
     """Test all Furhat builtin gestures"""
 
@@ -11,37 +10,37 @@ class BuiltinGestureTester:
         # Builtin gestures categorized
         self.builtin_gestures = {
             "basic_expressions": [
-                "BigSmile",  # Big smile
-                "Smile",  # Smile
-                "Wink",  # Wink
-                "Surprise",  # Surprise
-                "Oh",  # Oh/realization
-                "Thoughtful",  # Thoughtful
+                "BigSmile",  # Raised brows + big smile
+                "Smile",  # Raised brows + smile (less intense than BigSmile)
+                "Wink",  # Left eye wink + head tilts slightly right
+                "Surprise",  # Raised brows + mouth wide open
+                "Oh",  # Raised brows + mouth in "oh" shape
+                "Thoughtful",  # Frown brows + pout lips
             ],
 
             "emotion_expressions": [
-                "ExpressAnger",  # Anger
-                "ExpressDisgust",  # Disgust
-                "ExpressFear",  # Fear
-                "ExpressSad",  # Sadness
+                "ExpressAnger",  # Frown brows + show teeth (intense frown)
+                "ExpressDisgust",  # Frown brows + mouth corner down/asymmetric (moderate frown)
+                "ExpressFear",  # Brows shape like 八 + mouth slightly open
+                "ExpressSad",  # Brows shape like 八 + mouth corners down/symmetric
             ],
 
             "head_movements": [
-                "Nod",  # Nod head
-                "Shake",  # Shake head
-                "Roll",  # Roll head
+                "Nod",  # Nod up-down then return to center
+                "Shake",  # Shake left-right then return to center
+                "Roll",  # Sway left-right then return to center
             ],
 
             "brow_movements": [
-                "BrowRaise",  # Raise eyebrows
-                "BrowFrown",  # Frown eyebrows
+                "BrowRaise",  # Raise both eyebrows
+                "BrowFrown",  # Frown brows + slightly narrow eyes
             ],
 
             "eye_movements": [
-                "GazeAway",  # Look away
-                "Blink",  # Blink
-                "CloseEyes",  # Close eyes
-                "OpenEyes",  # Open eyes
+                "GazeAway",  # Look down-left then return to center
+                "Blink",  # Both eyes blink
+                "CloseEyes",
+                "OpenEyes",
             ],
         }
 
@@ -99,11 +98,9 @@ class BuiltinGestureTester:
         await self.furhat.request_face_reset()
         await self.furhat.disconnect()
 
-
 async def main():
     tester = BuiltinGestureTester()
     await tester.setup()
-
 
     # Test all gestures
     await tester.test_all_categories()
@@ -118,7 +115,6 @@ async def main():
     await tester.test_led_colors()
 
     await tester.cleanup()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

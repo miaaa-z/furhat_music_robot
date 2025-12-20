@@ -12,6 +12,15 @@ from test_custom_behaviour import CustomBehaviorTester
 class SomeoneLikeYouPerformance:
     """Furhat performance synchronized with 'Someone Like You'"""
 
+    def print_current_behavior(self, start_sec, end_sec, source, method_name, params):
+        """Print current behavior information for video recording"""
+        print("\n" + "=" * 60)
+        print(f"Time: {start_sec:.1f}s - {end_sec:.1f}s")
+        print(f"Type: {source.upper()}")
+        print(f"Action: {method_name}")
+        print(f"Parameters: {params}")
+        print("=" * 60 + "\n")
+
     def __init__(self, music_url):
         self.music_url = music_url
         self.builtin = BuiltinGestureTester()
@@ -21,7 +30,7 @@ class SomeoneLikeYouPerformance:
         # Schedule: (start_sec, end_sec, "builtin" or "custom", method_name, params_dict)
         # gesture_duration: how long each single gesture lasts (default = full duration)
         self.schedule = [
-            (0, 13, "builtin", "Roll", {"intensity": 1.0, "repetitions": 5, "gesture_duration": 2.0}),
+            (0, 13, "builtin", "Roll", {"intensity": 0.8, "repetitions": 5, "gesture_duration": 2.0}),
             (13, 17, "builtin", "Surprise", {"intensity": 1.0}),  # hold for full duration
             (17, 31.5, "builtin", "Thoughtful", {"intensity": 0.4}),
             (31.5, 34, "builtin", "Surprise", {"intensity": 1.0}),
@@ -29,7 +38,7 @@ class SomeoneLikeYouPerformance:
             (40, 41.5, "custom", "custom_raise_one_brow", {"intensity": 1.0, "side": "left"}),
             (41.5, 50, "custom", "custom_slight_frown", {"intensity": 1.0}),
             (50, 52, "builtin", "Surprise", {"intensity": 1.0}),
-            (52, 73, "builtin", "Roll", {"intensity": 1.0, "repetitions": 21, "gesture_duration": 0.5}),  # head swaying
+            (52, 73, "builtin", "Roll", {"intensity": 0.6, "repetitions": 21, "gesture_duration": 0.5}),  # head swaying
             (73, 75, "builtin", "Blink", {"intensity": 1.0}),
             (75, 84, "builtin", "Smile", {"intensity": 1.0}),
             (84, 86, "builtin", "Oh", {"intensity": 1.0}),
@@ -43,7 +52,7 @@ class SomeoneLikeYouPerformance:
             (125, 127, "custom", "test_head_positions", {}),
             (127, 131, "custom", "custom_narrow", {"intensity": 0.7}),
             (131, 134, "builtin", "BrowRaise", {"intensity": 1.0}),
-            (134, 139, "builtin", "Roll", {"intensity": 1.0, "repetitions": 5, "gesture_duration": 0.5}),
+            (134, 139, "builtin", "Roll", {"intensity": 0.6, "repetitions": 5, "gesture_duration": 0.5}),
             (139, 150, "custom", "custom_slight_frown", {"intensity": 1.0}),
             (150, 154, "builtin", "Surprise", {"intensity": 1.0}),
             (154, 169, "builtin", "BigSmile", {"intensity": 1.0}),
@@ -78,11 +87,12 @@ class SomeoneLikeYouPerformance:
             remaining = end_time - asyncio.get_event_loop().time()
             if remaining < gesture_duration * 0.5:  # Not enough time for another full one
                 break
+
     async def perform(self):
         """Start synchronized performance"""
-        print("Starting performance...")
+        print("\nStarting performance: Someone Like You\n")
 
-        # Start playing audio (non-blocking)
+        # Start playing audio
         try:
             await self.builtin.furhat.request_speak_audio(
                 url=self.music_url,
@@ -105,6 +115,9 @@ class SomeoneLikeYouPerformance:
             if wait > 0:
                 await asyncio.sleep(wait)
 
+            # Print current behavior (this will show in terminal during recording)
+            self.print_current_behavior(start_sec, end_sec, source, method_name, params)
+
             # Execute gesture
             duration = end_sec - start_sec
 
@@ -112,7 +125,7 @@ class SomeoneLikeYouPerformance:
                 if source == "builtin":
                     intensity = params.get("intensity", 1.0)
                     repetitions = params.get("repetitions", 1)
-                    gesture_duration = params.get("gesture_duration", duration)  # Default: hold for full duration
+                    gesture_duration = params.get("gesture_duration", duration)
 
                     task = asyncio.create_task(
                         self.repeat_builtin_gesture(method_name, intensity, duration, repetitions, gesture_duration)
@@ -131,14 +144,33 @@ class SomeoneLikeYouPerformance:
         if remaining > 0:
             await asyncio.sleep(remaining)
 
-        print("Performance complete")
+        print("\nPerformance complete\n")
 
     async def cleanup(self):
         """Clean up connections"""
+        # Cancel all active tasks
         for task in self.active_tasks:
-            task.cancel()
-        await self.builtin.cleanup()
-        await self.custom.cleanup()
+            if not task.done():
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
+
+        # Try to cleanup connections with error handling
+        try:
+            await self.builtin.cleanup()
+        except RuntimeError as e:
+            print(f"Builtin cleanup note: {e}")
+        except Exception as e:
+            print(f"Builtin cleanup error: {e}")
+
+        try:
+            await self.custom.cleanup()
+        except RuntimeError as e:
+            print(f"Custom cleanup note: {e}")
+        except Exception as e:
+            print(f"Custom cleanup error: {e}")
 
 
 async def main():
