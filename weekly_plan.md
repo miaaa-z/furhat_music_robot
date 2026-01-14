@@ -98,6 +98,7 @@
 - Librosa shows inconsistencies:
   - Counter-intuitive results ("Uptown Funk" slower than "Someone Like You")
   - Large BPM fluctuations within songs using 3-second windows (90→120→130 BPM)
+  - 
   - 5-second windows more stable but accuracy uncertain
 - Possible causes: Eighth-note detection instead of quarter-notes, model limitations
 
