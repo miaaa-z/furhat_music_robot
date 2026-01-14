@@ -1,214 +1,160 @@
+import random
+
 FEATURE_RANGES = {
-    'tempo': {
-        'slow': (0, 100),
-        'moderate': (100, 130),
-        'fast': (130, 200)
+    'tempo': {'slow': (0, 110), 'moderate': (110, 130), 'fast': (130, 300)},
+    'energy': {'low': (0, 0.10), 'medium': (0.10, 0.20), 'high': (0.20, 0.40)},
+    'brightness': {'dark': (0, 1800), 'neutral': (1800, 2300), 'bright': (2300, 5000)}
+}
+
+# LED colors
+LED_COLORS = {
+    'white': '#FFFFFF', 'red': '#FF0000', 'orange': '#FFA500', 'yellow': '#FFFF00',
+    'green': '#00FF00', 'blue': '#0000FF', 'pink': '#FF69B4', 'purple': '#800080'
+}
+
+# Behavior map: (tempo, energy, brightness) -> gestures and LED
+BEHAVIOR_MAP = {
+    # Slow tempo
+    ('slow', 'low', 'dark'): {
+        'gestures': ['Thoughtful', 'CloseEyes', 'head_sway', 'ExpressSad'],
+        'led': LED_COLORS['blue']
     },
-    'energy': {
-        'low': (0, 0.15),  # Quiet
-        'medium': (0.15, 0.23),  # Moderate
-        'high': (0.23, 1.0)  # Loud
+    ('slow', 'low', 'neutral'): {
+        'gestures': ['Thoughtful', 'CloseEyes', 'head_sway', 'Smile', 'GazeAway'],
+        'led': LED_COLORS['blue']
+    },
+    ('slow', 'low', 'bright'): {
+        'gestures': ['Thoughtful', 'head_sway', 'Smile', 'OpenEyes'],
+        'led': LED_COLORS['green']
+    },
+
+    ('slow', 'medium', 'dark'): {
+        'gestures': ['head_sway', 'Smile', 'Thoughtful', 'CloseEyes'],
+        'led': LED_COLORS['green']
+    },
+    ('slow', 'medium', 'neutral'): {
+        'gestures': ['head_sway', 'Smile', 'GazeAway'],
+        'led': LED_COLORS['green']
+    },
+    ('slow', 'medium', 'bright'): {
+        'gestures': ['head_sway', 'Smile', 'BrowRaise', 'OpenEyes', 'BigSmile'],
+        'led': LED_COLORS['yellow']
+    },
+
+    ('slow', 'high', 'dark'): {
+        'gestures': ['head_nod_fast', 'ExpressSad', 'BrowRaise', 'Thoughtful'],
+        'led': LED_COLORS['purple']
+    },
+    ('slow', 'high', 'neutral'): {
+        'gestures': ['head_nod_fast', 'BrowRaise', 'Surprise', 'Smile'],
+        'led': LED_COLORS['purple']
+    },
+    ('slow', 'high', 'bright'): {
+        'gestures': ['head_nod_fast', 'Surprise', 'BrowRaise', 'BigSmile', 'OpenEyes'],
+        'led': LED_COLORS['orange']
+    },
+
+    # Moderate tempo
+    ('moderate', 'low', 'dark'): {
+        'gestures': ['head_sway', 'Thoughtful', 'GazeAway', 'CloseEyes'],
+        'led': LED_COLORS['green']
+    },
+    ('moderate', 'low', 'neutral'): {
+        'gestures': ['head_sway', 'Smile', 'GazeAway', 'head_nod_fast'],
+        'led': LED_COLORS['green']
+    },
+    ('moderate', 'low', 'bright'): {
+        'gestures': ['head_sway', 'Smile', 'BrowRaise', 'OpenEyes'],
+        'led': LED_COLORS['white']
+    },
+
+    ('moderate', 'medium', 'dark'): {
+        'gestures': ['head_sway', 'Smile', 'Thoughtful', 'ExpressSad'],
+        'led': LED_COLORS['white']
+    },
+    ('moderate', 'medium', 'neutral'): {
+        'gestures': ['head_sway', 'Smile', 'BrowRaise', 'GazeAway'],
+        'led': LED_COLORS['white']
+    },
+    ('moderate', 'medium', 'bright'): {
+        'gestures': ['head_sway', 'Smile', 'BrowRaise', 'Surprise', 'BigSmile'],
+        'led': LED_COLORS['yellow']
+    },
+
+    ('moderate', 'high', 'dark'): {
+        'gestures': ['head_nod_fast', 'head_sway', 'Thoughtful', 'BrowRaise'],
+        'led': LED_COLORS['yellow']
+    },
+    ('moderate', 'high', 'neutral'): {
+        'gestures': ['head_nod_fast', 'head_sway', 'Smile', 'Surprise', 'BrowRaise'],
+        'led': LED_COLORS['yellow']
+    },
+    ('moderate', 'high', 'bright'): {
+        'gestures': ['head_nod_fast', 'Smile', 'Surprise', 'BrowRaise', 'BigSmile'],
+        'led': LED_COLORS['orange']
+    },
+
+    # Fast tempo
+    ('fast', 'low', 'dark'): {
+        'gestures': ['head_shake_fast', 'head_sway', 'Thoughtful', 'CloseEyes'],
+        'led': LED_COLORS['pink']
+    },
+    ('fast', 'low', 'neutral'): {
+        'gestures': ['head_shake_fast', 'head_sway', 'Smile', 'GazeAway'],
+        'led': LED_COLORS['pink']
+    },
+    ('fast', 'low', 'bright'): {
+        'gestures': ['head_shake_fast', 'Smile', 'BrowRaise', 'OpenEyes'],
+        'led': LED_COLORS['yellow']
+    },
+
+    ('fast', 'medium', 'dark'): {
+        'gestures': ['head_shake_fast', 'Smile', 'Thoughtful', 'swaying'],
+        'led': LED_COLORS['orange']
+    },
+    ('fast', 'medium', 'neutral'): {
+        'gestures': ['head_shake_fast', 'Smile', 'BrowRaise', 'swaying', 'GazeAway'],
+        'led': LED_COLORS['orange']
+    },
+    ('fast', 'medium', 'bright'): {
+        'gestures': ['head_shake_fast', 'Smile', 'BrowRaise', 'Surprise', 'BigSmile'],
+        'led': LED_COLORS['red']
+    },
+
+    ('fast', 'high', 'dark'): {
+        'gestures': ['head_shake_fast', 'head_nod_fast', 'BrowRaise', 'ExpressSad'],
+        'led': LED_COLORS['red']
+    },
+    ('fast', 'high', 'neutral'): {
+        'gestures': ['head_shake_fast', 'head_nod_fast', 'Surprise', 'BrowRaise'],
+        'led': LED_COLORS['red']
+    },
+    ('fast', 'high', 'bright'): {
+        'gestures': ['head_shake_fast', 'head_nod_fast', 'Surprise', 'BrowRaise', 'BigSmile'],
+        'led': LED_COLORS['red']
     }
 }
 
-# Global behavior mapping based on tempo + energy
-GLOBAL_BEHAVIOR_MAP = {
-    # SLOW TEMPO
-    ('slow', 'low'): {
-        'base_gesture': 'Nod',
-        'gesture_speed': 0.5,
-        'led_color': '#6B7280',  # Gray-blue - contemplative
-        'expression': 'Thoughtful',
-        'beat_response': 'subtle',
-        'description': 'Slow and quiet - contemplative mood'
-    },
-    ('slow', 'medium'): {
-        'base_gesture': 'Nod',
-        'gesture_speed': 0.7,
-        'led_color': '#87CEEB',  # Sky blue - calm
-        'expression': 'Smile',
-        'beat_response': 'moderate',
-        'description': 'Slow and medium - relaxed mood'
-    },
-    ('slow', 'high'): {
-        'base_gesture': 'Nod',
-        'gesture_speed': 0.8,
-        'led_color': '#9370DB',  # Purple - dramatic
-        'expression': 'Oh',
-        'beat_response': 'moderate',
-        'description': 'Slow but intense - dramatic mood'
-    },
 
-    # MODERATE TEMPO
-    ('moderate', 'low'): {
-        'base_gesture': 'Nod',
-        'gesture_speed': 0.8,
-        'led_color': '#B0C4DE',  # Light steel blue - gentle
-        'expression': 'Smile',
-        'beat_response': 'subtle',
-        'description': 'Moderate tempo, low energy - gentle groove'
-    },
-    ('moderate', 'medium'): {
-        'base_gesture': 'Nod',
-        'gesture_speed': 1.0,
-        'led_color': '#FFFFFF',  # White - neutral/happy
-        'expression': 'Smile',
-        'beat_response': 'moderate',
-        'description': 'Moderate tempo and energy - balanced mood'
-    },
-    ('moderate', 'high'): {
-        'base_gesture': 'Nod',
-        'gesture_speed': 1.2,
-        'led_color': '#FFD700',  # Gold - upbeat
-        'expression': 'BigSmile',
-        'beat_response': 'strong',
-        'description': 'Moderate tempo, high energy - upbeat mood'
-    },
-
-    # FAST TEMPO
-    ('fast', 'low'): {
-        'base_gesture': 'Shake',
-        'gesture_speed': 1.0,
-        'led_color': '#00CED1',  # Dark cyan - quirky
-        'expression': 'Smile',
-        'beat_response': 'moderate',
-        'description': 'Fast but quiet - quirky/playful'
-    },
-    ('fast', 'medium'): {
-        'base_gesture': 'Shake',
-        'gesture_speed': 1.3,
-        'led_color': '#FFA500',  # Orange - energetic
-        'expression': 'BigSmile',
-        'beat_response': 'strong',
-        'description': 'Fast and medium energy - energetic'
-    },
-    ('fast', 'high'): {
-        'base_gesture': 'Shake',
-        'gesture_speed': 1.5,
-        'led_color': '#FF6B6B',  # Bright red - intense
-        'expression': 'Surprise',
-        'beat_response': 'strong',
-        'description': 'Fast and loud - intense/exciting'
-    }
-}
-
-# Beat response behaviors
-BEAT_BEHAVIORS = {
-    'subtle': {
-        'strong_beat': {
-            'gesture': 'Nod',
-            'led_flash': True,
-            'led_flash_duration': 0.1,
-            'led_flash_brightness': 1.2,  # 20% brighter
-            'blink': False,
-            'description': 'Subtle nod on strong beats only'
-        },
-        'weak_beat': None  # No response to weak beats
-    },
-
-    'moderate': {
-        'strong_beat': {
-            'gesture': 'Nod',
-            'led_flash': True,
-            'led_flash_duration': 0.15,
-            'led_flash_brightness': 1.3,  # 30% brighter
-            'blink': False,
-            'description': 'Clear nod with LED flash on strong beats'
-        },
-        'weak_beat': {
-            'gesture': None,  # No gesture
-            'led_flash': True,
-            'led_flash_duration': 0.08,
-            'led_flash_brightness': 1.1,  # 10% brighter
-            'blink': False,
-            'description': 'Small LED pulse on weak beats'
-        }
-    },
-
-    'strong': {
-        'strong_beat': {
-            'gesture': 'Nod',  # or can be 'Shake' based on tempo
-            'led_flash': True,
-            'led_flash_duration': 0.2,
-            'led_flash_brightness': 1.5,  # 50% brighter
-            'blink': True,  # Blink on strong beats
-            'description': 'Emphatic response with gesture, LED, and blink'
-        },
-        'weak_beat': {
-            'gesture': None,
-            'led_flash': True,
-            'led_flash_duration': 0.1,
-            'led_flash_brightness': 1.2,
-            'blink': False,
-            'description': 'Moderate LED flash on weak beats'
-        }
-    }
-}
-
-DEFAULT_BEHAVIOR = {
-    'base_gesture': 'Nod',
-    'gesture_speed': 1.0,
-    'led_color': '#FFFFFF',
-    'expression': 'Smile',
-    'beat_response': 'moderate',
-    'description': 'Default neutral behavior'
-}
+def categorize_tempo(bpm):
+    return 'slow' if bpm < 110 else 'moderate' if bpm < 130 else 'fast'
 
 
-# Helper functions
-def categorize_tempo(tempo_bpm):
-    """Categorize tempo value into slow/moderate/fast"""
-    if tempo_bpm < 90:
-        return 'slow'
-    elif tempo_bpm < 120:
-        return 'moderate'
-    else:
-        return 'fast'
+def categorize_energy(energy):
+    return 'low' if energy < 0.10 else 'medium' if energy < 0.20 else 'high'
 
 
-def categorize_energy(energy_value):
-    """Categorize energy (RMS) value into low/medium/high"""
-    if energy_value < 0.02:
-        return 'low'
-    elif energy_value < 0.05:
-        return 'medium'
-    else:
-        return 'high'
+def categorize_brightness(hz):
+    return 'dark' if hz < 1800 else 'neutral' if hz < 2300 else 'bright'
 
 
-def get_behavior(tempo_cat, energy_cat):
-    """
-    Get behavior configuration for given tempo and energy categories
+def get_behavior(tempo_cat, energy_cat, brightness_cat):
+    """Get two gesture names and LED color"""
 
-    Args:
-        tempo_cat (str): 'slow', 'moderate', or 'fast'
-        energy_cat (str): 'low', 'medium', or 'high'
+    config = BEHAVIOR_MAP.get((tempo_cat, energy_cat, brightness_cat),
+                              {'gestures': ['Smile', 'head_sway'], 'led': LED_COLORS['white']})
 
-    Returns:
-        dict: Behavior configuration dictionary
-    """
-    key = (tempo_cat, energy_cat)
-    behavior = GLOBAL_BEHAVIOR_MAP.get(key, DEFAULT_BEHAVIOR)
-    return behavior.copy()  # Return a copy to avoid mutations
+    # Randomly select 2 gestures from the list
+    gestures = random.sample(config['gestures'], min(2, len(config['gestures'])))
 
-
-def get_beat_behavior(beat_response_level, beat_strength):
-    """
-    Get beat response behavior
-
-    Args:
-        beat_response_level (str): 'subtle', 'moderate', or 'strong'
-        beat_strength (str): 'strong_beat' or 'weak_beat'
-
-    Returns:
-        dict or None: Beat behavior configuration, or None if no response
-    """
-    if beat_response_level not in BEAT_BEHAVIORS:
-        beat_response_level = 'moderate'
-
-    beat_config = BEAT_BEHAVIORS[beat_response_level].get(beat_strength)
-
-    if beat_config is None:
-        return None
-
-    return beat_config.copy()
+    return gestures, config['led']

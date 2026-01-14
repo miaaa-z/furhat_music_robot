@@ -1,0 +1,69 @@
+Total Unique Behaviors: 18
+Total Instances: 91
+
+Behavior Frequencies:
+----------------------------------------------------------------------
+✅ swaying                   |  19x
+✅ brow_raise                |  11x
+✅ looking                   |  10x
+✅ smile                     |  10x
+✅ nodding                   |  10x
+✅ frown                     |   8x
+✅ thoughtful                |   7x
+✅ surprise                  |   4x
+⚠️ brow_raise_left           |   2x
+⚠️ shaking                   |   2x
+⚠️ lifting_head              |   1x
+⚠️ blink                     |   1x
+⚠️ oh_face                   |   1x
+⚠️ narrow_eyes               |   1x
+⚠️ relaxed_face              |   1x
+⚠️ eyes_widen                |   1x
+⚠️ close_eyes                |   1x
+⚠️ craning                   |   1x
+
+
+Low-Frequency Behaviors:
+----------------------------------------------------------------------
+brow_raise_left: 2 times
+shaking: 2 times
+lifting_head: 1 times
+blink: 1 times
+oh_face: 1 times
+narrow_eyes: 1 times
+relaxed_face: 1 times
+eyes_widen: 1 times
+close_eyes: 1 times
+craning: 1 times
+
+
+By Category:
+----------------------------------------------------------------------
+
+Head Movements:
+  nodding: 10x
+  swaying: 19x
+  shaking: 2x
+  lifting_head: 1x
+  craning: 1x
+
+Looking:
+  looking: 10x
+
+Facial Expressions:
+  smile: 10x
+  frown: 8x
+  surprise: 4x
+  oh_face: 1x
+  thoughtful: 7x
+  relaxed_face: 1x
+
+Brows:
+  brow_raise: 11x
+  brow_raise_left: 2x
+
+Eyes:
+  close_eyes: 1x
+  eyes_widen: 1x
+  narrow_eyes: 1x
+  blink: 1x

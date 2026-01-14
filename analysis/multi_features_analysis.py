@@ -7,21 +7,12 @@ AUDIO_DIR = '/Users/miaaa/Desktop/music robot/3_songs_downloads'
 SONGS = {
     'Uptown Funk': {
         'file': 'Uptown_Funk.wav',
-        'real_bpm': 116,
-        'real_energy': 61,
-        'real_danceability': 86,
     },
     'Someone Like You': {
         'file': 'Adele_Someone_Like_You.wav',
-        'real_bpm': 135,
-        'real_energy': 33,
-        'real_danceability': 56,
     },
     'Back to Black': {
         'file': 'back_to_black.wav',
-        'real_bpm': 124,
-        'real_energy': 73,
-        'real_danceability': 49,
     }
 }
 
@@ -89,48 +80,10 @@ def analyze_song(audio_path):
         'zero_crossing_rate': avg_zcr,
         'tempo_std': tempo_std,
         'tempo_range': (tempo_min, tempo_max),
-        'energy_range': (min(energies), max(energies)) if energies else (0, 0)
-    }
-
-
-def calculate_liveliness_score(bpm, energy, danceability):
-    """Calculate overall liveliness score: BPM×30% + Energy×30% + Danceability×40%"""
-    return bpm * 0.3 + energy * 0.3 + danceability * 0.4
-
-
-def get_motion_parameters(bpm, energy, danceability):
-    """Generate robot motion parameters based on audio features."""
-    beat_interval = 60 / bpm
-
-    # Amplitude based on energy
-    if energy > 60:
-        amplitude = "Large (±30°)"
-    elif energy > 40:
-        amplitude = "Medium (±20°)"
-    else:
-        amplitude = "Small (±10°)"
-
-    # Complexity based on danceability
-    if danceability > 70:
-        complexity = "Frequent changes"
-    elif danceability > 50:
-        complexity = "Moderate changes"
-    else:
-        complexity = "Simple repetition"
-
-    # LED suggestion
-    if danceability > 70:
-        led = "Bright warm"
-    elif energy > 60:
-        led = "Bright"
-    else:
-        led = "Soft"
-
-    return {
-        'beat_interval': beat_interval,
-        'amplitude': amplitude,
-        'complexity': complexity,
-        'led': led
+        'energy_range': (min(energies), max(energies)) if energies else (0, 0),
+        'windowed_tempos': tempos,
+        'windowed_energies': energies,
+        'window_times': times
     }
 
 
@@ -154,107 +107,49 @@ def main():
         print("No songs analyzed successfully")
         return
 
-    # Print BPM comparison
-    print("\n" + "=" * 90)
-    print("BPM ANALYSIS")
-    print("=" * 90)
-    print(f"{'Song':<20} {'Detected BPM':<15} {'Real BPM':<12} {'Error':<15} {'Stability (±)':<15}")
-    print("-" * 90)
+    # Print detected features summary
+    print("\nAUDIO FEATURES SUMMARY")
+    print(f"{'Song':<20} {'BPM':<10} {'Energy':<10} {'Tempo Std':<12}")
 
-    for name, info in SONGS.items():
+    for name in SONGS.keys():
         if name not in results:
             continue
 
         res = results[name]
-        real_bpm = info['real_bpm']
-        detected_bpm = res['global_tempo']
-        error = abs(detected_bpm - real_bpm)
-        error_pct = (error / real_bpm) * 100
+        print(f"{name:<20} {res['global_tempo']:<10.1f} {res['global_energy']:<10.1f} {res['tempo_std']:<12.1f}")
 
-        print(f"{name:<20} {detected_bpm:<15.1f} {real_bpm:<12} "
-              f"{error:.1f} ({error_pct:.1f}%){' ':<3} {res['tempo_std']:.1f} BPM")
+    # Detailed features
+    print("\nDETAILED FEATURES")
 
-    # Print energy comparison
-    print(f"\n{'Song':<20} {'Detected Energy':<18} {'Real Energy':<15} {'Motion Guide':<30}")
-    print("-" * 90)
-
-    for name, info in SONGS.items():
-        if name not in results:
-            continue
-
-        res = results[name]
-        detected = res['global_energy']
-        real = info['real_energy']
-
-        if detected > 60:
-            desc = "High → Large amplitude"
-        elif detected > 40:
-            desc = "Medium → Medium amplitude"
-        else:
-            desc = "Low → Small amplitude"
-
-        print(f"{name:<20} {detected:<18.1f} {real:<15} {desc:<30}")
-
-    # Liveliness scores
-    print("\n" + "=" * 90)
-    print("LIVELINESS SCORE (BPM×30% + Energy×30% + Danceability×40%)")
-    print("=" * 90)
-
-    scores = {}
-    for name, info in SONGS.items():
-        if name not in results:
-            continue
-
-        score = calculate_liveliness_score(
-            info['real_bpm'],
-            info['real_energy'],
-            info['real_danceability']
-        )
-        scores[name] = score
-
-        print(f"{name}: {score:.1f}")
-
-    max_song = max(scores, key=scores.get)
-    print(f"\nHighest score: {max_song} ({scores[max_song]:.1f})")
-
-    # Robot motion parameters
-    print("\n" + "=" * 90)
-    print("ROBOT MOTION PARAMETERS")
-    print("=" * 90)
-    print(f"{'Song':<20} {'Beat Interval':<15} {'Amplitude':<18} {'Complexity':<20} {'LED':<15}")
-    print("-" * 90)
-
-    for name, info in SONGS.items():
-        if name not in results:
-            continue
-
-        params = get_motion_parameters(
-            info['real_bpm'],
-            info['real_energy'],
-            info['real_danceability']
-        )
-
-        print(f"{name:<20} {params['beat_interval']:.2f}s{' ' * 8} "
-              f"{params['amplitude']:<18} {params['complexity']:<20} {params['led']:<15}")
-
-    # Additional features
-    print("\n" + "=" * 90)
-    print("DETAILED FEATURES")
-    print("=" * 90)
-
-    for name, info in SONGS.items():
+    for name in SONGS.keys():
         if name not in results:
             continue
 
         res = results[name]
         print(f"\n{name}:")
         print(f"  Duration: {res['duration']:.2f}s")
+        print(f"  Global tempo: {res['global_tempo']:.1f} BPM")
+        print(f"  Global energy: {res['global_energy']:.1f}")
         print(f"  Tempo stability: {res['tempo_std']:.1f} (std dev, lower = more stable)")
         print(f"  Tempo range: {res['tempo_range'][0]:.1f} ~ {res['tempo_range'][1]:.1f} BPM")
         print(f"  Spectral centroid: {res['spectral_centroid']:.1f} Hz (brightness)")
         print(f"  Zero crossing rate: {res['zero_crossing_rate']:.4f} (complexity)")
+        print(f"  Energy range: {res['energy_range'][0]:.4f} ~ {res['energy_range'][1]:.4f}")
 
-    print("\n" + "=" * 90 + "\n")
+    # Windowed data arrays
+    print("\nWINDOWED DATA ARRAYS")
+
+    for name in SONGS.keys():
+        if name not in results:
+            continue
+
+        res = results[name]
+        print(f"\n{name}:")
+        print(f"  times = {[round(t, 1) for t in res['window_times']]}")
+        print(f"  tempos = {[round(t, 1) if t is not None else None for t in res['windowed_tempos']]}")
+        print(f"  energies = {[round(e, 4) for e in res['windowed_energies']]}")
+
+    print()
 
 
 if __name__ == "__main__":
