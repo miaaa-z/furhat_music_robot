@@ -3,7 +3,7 @@ import numpy as np
 
 
 def test_models():
-    audio_path = "/Users/miaaa/Desktop/music robot/test/cruel_summer.wav"
+    audio_path = "/Users/miaaa/Desktop/music robot/test/zoo.wav"
     model_dir = "/Users/miaaa/Desktop/music robot/furhat_music_robot/essentia_models/"
 
     # Load audio at 16kHz sample rate
@@ -35,7 +35,7 @@ def test_models():
         avg_predictions = np.mean(predictions, axis=0)
 
         print(f"Not Danceable: {avg_predictions[0]:.3f}, Danceable: {avg_predictions[1]:.3f}")
-        print(f"Result: {'High danceability!' if avg_predictions[1] > 0.5 else 'Low danceability'}")
+        print(f"Result: {'High danceability' if avg_predictions[1] > 0.5 else 'Low danceability'}")
     except Exception as e:
         print(f"Error: {e}")
 
@@ -84,9 +84,34 @@ def test_models():
     except Exception as e:
         print(f"Model not found or error: {e}")
 
-    print("\n" + "=" * 60)
-    print("Testing complete!")
-    print("=" * 60)
+    # Test Happy model
+    print("\nTesting Happy model...")
+    try:
+        model = es.TensorflowPredict2D(
+            graphFilename=model_dir + "mood_happy-discogs-effnet-1.pb",
+            output="model/Softmax"
+        )
+        predictions = model(embeddings)
+        avg_predictions = np.mean(predictions, axis=0)
+
+        print(f"Not Happy: {avg_predictions[0]:.3f}, Happy: {avg_predictions[1]:.3f}")
+        print(f"Result: {'Happy music' if avg_predictions[1] > 0.5 else 'Not happy music'}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+    # Test Engagement model
+    print("\nTesting Engagement model...")
+    try:
+        model = es.TensorflowPredict2D(
+            graphFilename=model_dir + "engagement_regression-discogs-effnet-1.pb",
+            output="model/Identity"
+        )
+        predictions = model(embeddings)
+        avg_engagement = np.mean(predictions)
+
+        print(f"Engagement score: {avg_engagement:.3f}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
