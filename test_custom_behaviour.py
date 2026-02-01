@@ -207,11 +207,11 @@ async def main():
     # await tester.furhat.request_speak_text("head positions", wait=True)
     # await tester.head_positions(0,-0.5,1)  # look down
     #
-    # await tester.furhat.request_speak_text("head tilts", wait=True)
-    # await tester.head_tilts(50, 0, 0)
+    await tester.furhat.request_speak_text("head tilts", wait=True)
+    await tester.head_tilts(0, 10, 0)
     #
-    await tester.furhat.request_speak_text("nod", wait=True)
-    await tester.head_nod_fast(times=5)
+    # await tester.furhat.request_speak_text("nod", wait=True)
+    # await tester.head_nod_fast(times=5)
 
     # await tester.furhat.request_speak_text("head sway", wait=True)
     # await tester.head_sway(times=5)
