@@ -2,7 +2,7 @@ import librosa
 import numpy as np
 import asyncio
 from furhat_realtime_api import AsyncFurhatClient
-from test_custom_behaviour import CustomBehaviorTester  # 只保留自定义手势
+from test_custom_behaviour import CustomBehaviorTester
 from behavior_definitions import categorize_tempo, categorize_energy, categorize_brightness, get_behavior
 
 AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/not_like_us.wav"
