@@ -1,0 +1,8 @@
+start_time,end_time,duration,head movement,facial expression,intensity
+0,3,3,none,smile,3
+3,30,27,sway,smile,2
+30,54,24,sway,smile,3
+54,67,13,nod,neutral,3
+67,102,35,sway,neutral,3
+102,148,46,sway,neutral,2
+148,186,38,sway,close eyes,1

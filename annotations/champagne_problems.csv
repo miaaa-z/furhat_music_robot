@@ -1,0 +1,11 @@
+start_time,end_time,duration,head movement,facial expression,intensity
+0,23,23,nod,neutral,1
+23,44,21,nod,thoughtful,1
+44,66,22,sway,frown,1
+66,88,22,nod,neutral,1
+88,93,5,none,"smile, frown",3
+93,122,29,nod,neutral,1
+122,144,22,nod,frown,1
+144,190,46,sway,sad face,1
+190,224,34,nod,frown,1
+224,244,20,none,frown,3

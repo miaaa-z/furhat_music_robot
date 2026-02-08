@@ -1,0 +1,36 @@
+start_time,end_time,dura,head movement,facial expression,intensity
+0,13,13,sway,neutral,1
+13,17,4,none,"browraise, surprise",3
+17,32,15,sway,thoughtful,1
+32,34,2,none,"browraise, surprise",3
+34,40,6,none,thoughtful,3
+40,50,10,none,frown,3
+50,52,2,none,"browraise, surprise",3
+52,73,21,sway,"frown, thoughtful",1
+73,84,11,none,smile,3
+84,86,2,none,oh,3
+86,88,2,none,browraise,3
+88,93,5,look up,thoughtful,3
+93,99,6,none,"smile, frown",3
+99,108,9,none,"browraise, smile",3
+108,118,10,none,"frown, thoughtful",3
+118,120,2,none,browraise,3
+120,125,5,none,frown,3
+125,127,2,look up,browraise,3
+127,131,4,look down,"narrow eyes, smile",3
+131,134,3,none,browraise,3
+134,139,5,sway,neutral,1
+139,150,11,look down,frown,3
+150,154,4,none,"browraise, smile",3
+154,169,15,none,big smile,3
+169,180,11,sway,smile,1
+180,184,4,none,"browraise, smile",3
+184,194,10,sway,frown,2
+194,204,10,look down,thoughtful face,3
+204,207,3,none,"browraise, surprise",3
+207,217,10,look up,thoughtful,3
+217,223,6,none,close eyes,3
+223,231,8,none,"browraise, smile",3
+231,238,7,none,big smile,3
+238,267,29,none,"browraise, smile, frown",3
+267,285,18,none,smile,3

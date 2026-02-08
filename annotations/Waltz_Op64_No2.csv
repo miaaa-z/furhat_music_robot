@@ -1,0 +1,10 @@
+start_time,end_time,duration,head movement,facial expression,intensity
+0,55,55,none,thoughtful,3
+55,65,10,none,smile,3
+65,80,15,none,close eyes,3
+80,124,44,none,thoughtful,3
+124,163,39,none,smile,3
+163,204,41,none,neutral,0
+204,229,25,look up,neutral,3
+229,245,16,none,smile,3
+245,251,6,none,close eyes,3

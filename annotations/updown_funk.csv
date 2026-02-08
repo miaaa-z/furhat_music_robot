@@ -1,0 +1,18 @@
+start_time,end_time,head movement,facial expression,intensity
+0,16,nod,neutral,3
+16,20,nod,"smile, close eyes",4
+20,24,sway,big smile,4
+24,34,nod,neutral,4
+34,47,shake, neutral,3
+47,49,sway,smile,3
+49,91,sway,"smile, close eyes",3
+91,94,none,angry face,3
+94,107,none,"smile, close eyes",3
+107,116,shake,neutral,3
+116,124,none,smile,3
+124,167,shake,neutral,5
+167,179,none,"frown, confused",3
+179,212,nod,big smile ,3
+212,240,sway,"big smile, close eyes",3
+240,250,shake,neutral,4
+250,269,nod,smile,4

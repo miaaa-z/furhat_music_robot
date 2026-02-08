@@ -1,0 +1,24 @@
+start_time,end_time,duration,head movement,facial expression,intensity
+0,11,11,none,frown,3
+11,24,13,sway,smile,2
+24,41,17,nod,smile,4
+41,45,4,shake,neutral,4
+45,52,7,nod,smile,3
+52,60,8,sway,smile,3
+60,65,5,nod,neutral,3
+65,68,3,shake,neutral,3
+68,80,12,nod,smile,4
+80,82,2,sway,neutral,3
+82,98,16,nod,neutral,3
+98,99,1,sway,neutral,3
+99,114,15,nod ,neutral,5
+114,120,6,shake,frown,3
+120,144,24,nod,neutral,4
+144,149,5,none,big smile,3
+149,159,10,nod,neutral,2
+159,168,9,sway,smile,3
+168,195,27,shake,frown,3
+195,227,32,nod,smile,5
+227,236,9,shake,smile,5
+236,244,8,none,big smile,3
+244,258,14,none,smile,3

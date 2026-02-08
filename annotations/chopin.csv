@@ -1,0 +1,14 @@
+start_time,end_time,duration,head movement,facial expression,intensity
+0,24,24,none,"close eyes, smile",1
+24,36,12,sway,smile,1
+36,48,12,sway,frown,1
+48,70,22,sway,"close eyes, smile",1
+70,80,10,sway,smile,3
+80,85,5,sway,"close eyes, smile",1
+85,97,12,none,oh face,3
+97,127,30,none,smile,3
+127,153,26,sway,"close eyes, smile",1
+153,187,34,sway,thoughtful,1
+187,203,16,none,oh face,3
+203,215,12,none,surprise,3
+215,237,22,none,smile,3

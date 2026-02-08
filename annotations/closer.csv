@@ -1,0 +1,13 @@
+start_time,end_time,duration,head movement,facial expression,intensity,Unnamed: 7
+0,10,10,none,neutral,0,
+10,27,17,nod,neutral,3,
+27,47,20,sway,neutral,2,
+47,70,23,nod,neutral,2,
+70,90,20,shake,smile,4,
+90,111,21,nod,neutral,2,
+111,145,34,sway,neutral,3,
+145,160,15,nod,big smile,5,
+160,172,12,shake,frown,3,
+172,210,38,nod,frown,3,
+210,232,22,nod,big smile,4, 
+232,244,12,none,neutral,0,

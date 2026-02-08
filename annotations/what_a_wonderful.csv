@@ -1,0 +1,6 @@
+start_time,end_time,duration,head movement,facial expression,intensity
+0,29,29,sway,"close eyes, frown",3
+29,62,33,sway,"smile, frown",3
+62,101,39,shake,thoughtful,2
+101,118,17,sway,smile,3
+118,139,21,none,smile,3
