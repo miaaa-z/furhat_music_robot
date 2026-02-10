@@ -1,4 +1,4 @@
-start_time,end_time,dura,head movement,facial expression,intensity
+start_time,end_time,duration,head movement,facial expression,intensity
 0,13,13,sway,neutral,1
 13,17,4,none,"browraise, surprise",3
 17,32,15,sway,thoughtful,1
