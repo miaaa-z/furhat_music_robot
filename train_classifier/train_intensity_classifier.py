@@ -32,13 +32,13 @@ print(f"Test:       {len(test_data)} segments")
 def merge_intensity(intensity):
     """
     Merge 6 classes into 3:
-    0-1 -> 0 (low intensity)
-    2-3 -> 1 (medium intensity)
+    0,1,2 -> 0 (low intensity)
+    3 -> 1 (medium intensity)
     4-5 -> 2 (high intensity)
     """
-    if intensity <= 1:
+    if intensity <= 2:
         return 0
-    elif intensity <= 3:
+    elif intensity == 3:
         return 1
     else:
         return 2
@@ -53,11 +53,6 @@ train_data_copy['intensity_merged'] = train_data_copy['intensity'].apply(merge_i
 val_data_copy['intensity_merged'] = val_data_copy['intensity'].apply(merge_intensity)
 test_data_copy['intensity_merged'] = test_data_copy['intensity'].apply(merge_intensity)
 
-# Print merge mapping
-print("\nClass merge mapping:")
-print("  Original classes 0,1 -> New class 0 (low intensity)")
-print("  Original classes 2,3 -> New class 1 (medium intensity)")
-print("  Original classes 4,5 -> New class 2 (high intensity)")
 
 # Print new class distribution
 unique, counts = np.unique(train_data_copy['intensity_merged'], return_counts=True)
