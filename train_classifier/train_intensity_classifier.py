@@ -2,8 +2,10 @@ import pandas as pd
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.utils.class_weight import compute_class_weight
+import numpy as np
 
-print("Training Intensity Classifier (SVM) \n")
+print("Training Intensity Classifier (SVM with Class Weights) \n")
 
 # Step 1: Load data
 features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features.csv')
@@ -13,14 +15,12 @@ print(f"Total segments: {len(features)}")
 print(f"Total songs: {len(metadata)}")
 
 # Step 2: Create song name to split mapping
-# Build a dictionary: song name -> split (Train/Validation/Test)
 song_split_dict = {}
 for index, row in metadata.iterrows():
     song_name = row['title']
     split_type = row['split']
     song_split_dict[song_name] = split_type
 
-# Add split column to features based on song name
 features['split'] = features['song_name'].map(song_split_dict)
 
 # Step 3: Split into Train, Validation, Test
@@ -33,12 +33,10 @@ print(f"Validation: {len(val_data)} segments")
 print(f"Test:       {len(test_data)} segments")
 
 # Step 4: Prepare features (X) and labels (y)
-# X = tempo, energy, brightness
 X_train = train_data[['tempo', 'energy', 'brightness']].values
 X_val = val_data[['tempo', 'energy', 'brightness']].values
 X_test = test_data[['tempo', 'energy', 'brightness']].values
 
-# y = intensity
 y_train = train_data['intensity'].values
 y_val = val_data['intensity'].values
 y_test = test_data['intensity'].values
@@ -52,8 +50,17 @@ X_train = scaler.fit_transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
-# Step 6: Train SVM
-svm = SVC(kernel='rbf', C=1.0, gamma='scale')
+# try new improvement: Compute class weights
+class_weights = compute_class_weight(
+    'balanced',
+    classes=np.unique(y_train),
+    y=y_train
+)
+class_weight_dict = dict(enumerate(class_weights))
+print(f"\nClass weights: {class_weight_dict}\n")
+
+# Step 6: Train SVM with class weights
+svm = SVC(kernel='rbf', C=1.0, gamma='scale', class_weight=class_weight_dict)
 svm.fit(X_train, y_train)
 print("Training complete\n")
 
@@ -62,7 +69,7 @@ print("Validation Results")
 y_val_pred = svm.predict(X_val)
 val_acc = accuracy_score(y_val, y_val_pred)
 print(f"Accuracy: {val_acc:.4f}")
-print("\n Classification Report:")
+print("\nClassification Report:")
 print(classification_report(y_val, y_val_pred))
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_val, y_val_pred))
