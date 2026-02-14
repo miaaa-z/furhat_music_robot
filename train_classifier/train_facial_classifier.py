@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import numpy as np
 
-print("Training Facial Expression Classifier (SVM) \n")
+print("Training Facial Expression Classifier (SVM with Merged Categories) \n")
 
 # Step 1-2: Load and prepare data
 features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features.csv')
@@ -24,29 +24,89 @@ for index, row in metadata.iterrows():
 features['split'] = features['song_name'].map(song_split_dict)
 
 # Step 3: Split into Train, Validation, Test
-train_data = features[features['split'] == 'Train']
-val_data = features[features['split'] == 'Validation']
-test_data = features[features['split'] == 'Test']
+train_data = features[features['split'] == 'Train'].copy()
+val_data = features[features['split'] == 'Validation'].copy()
+test_data = features[features['split'] == 'Test'].copy()
 
 print(f"Train:      {len(train_data)} segments")
 print(f"Validation: {len(val_data)} segments")
 print(f"Test:       {len(test_data)} segments")
 
-# Check facial_expression distribution
-print("\nFacial Expression Distribution (Training set):")
+
+# Merge facial expression categories
+def merge_facial_expression(expression):
+    """
+    Merge 21 categories into 9 based on your rules
+    """
+    expression = expression.strip().lower()
+
+    # Group 1: angry series
+    if 'angry' in expression:
+        return 'angry'
+
+    # Group 2: big smile series
+    elif expression in ['big smile', 'big smile, close eyes', 'browraise, smile']:
+        return 'big_smile'
+
+    # Group 3: surprise series (browraise, browraise+surprise, surprise, oh)
+    elif expression in ['browraise', 'browraise, surprise', 'surprise', 'oh']:
+        return 'surprise'
+
+    # Group 4: smile series (smile, close eyes, close eyes+smile)
+    elif expression in ['smile', 'close eyes', 'close eyes, smile']:
+        return 'smile'
+
+    # Group 5: disgust
+    elif expression == 'disgust':
+        return 'disgust'
+
+    # Group 6: frown series (frown, frown+confused, frown+thoughtful, smile+frown)
+    elif 'frown' in expression:
+        return 'frown'
+
+    # Group 7: neutral
+    elif expression == 'neutral':
+        return 'neutral'
+
+    # Group 8: sad
+    elif expression == 'sad':
+        return 'sad'
+
+    # Group 9: thoughtful
+    elif expression == 'thoughtful':
+        return 'thoughtful'
+
+    else:
+        return expression
+
+
+# Apply merging
+train_data['facial_merged'] = train_data['facial_expression'].apply(merge_facial_expression)
+val_data['facial_merged'] = val_data['facial_expression'].apply(merge_facial_expression)
+test_data['facial_merged'] = test_data['facial_expression'].apply(merge_facial_expression)
+
+# Print original distribution
+print("\nOriginal Facial Expression Distribution (Training set):")
 unique, counts = np.unique(train_data['facial_expression'], return_counts=True)
 total = len(train_data)
 for label, count in zip(unique, counts):
-    print(f" {label:30s}  {count:3d}  ({count/total*100:4.1f}%)")
+    print(f"  {label:30s}: {count:3d} ({count / total * 100:5.1f}%)")
+
+# Print merged distribution
+print("\nMerged Facial Expression Distribution (Training set):")
+unique, counts = np.unique(train_data['facial_merged'], return_counts=True)
+total = len(train_data)
+for label, count in zip(unique, counts):
+    print(f"  {label:15s}: {count:3d} ({count / total * 100:5.1f}%)")
 
 # Step 4: Prepare features (X) and labels (y)
 X_train = train_data[['tempo', 'energy', 'brightness']].values
 X_val = val_data[['tempo', 'energy', 'brightness']].values
 X_test = test_data[['tempo', 'energy', 'brightness']].values
 
-y_train = train_data['facial_expression'].values
-y_val = val_data['facial_expression'].values
-y_test = test_data['facial_expression'].values
+y_train = train_data['facial_merged'].values
+y_val = val_data['facial_merged'].values
+y_test = test_data['facial_merged'].values
 
 
 # Step 5: Normalize features
@@ -61,9 +121,10 @@ svm = SVC(
     C=10,
     gamma='scale',
     class_weight='balanced',
-    random_state=10
+    random_state=42
 )
 svm.fit(X_train, y_train)
+
 
 # Step 7: Evaluate on validation set
 print("Validation Results")
