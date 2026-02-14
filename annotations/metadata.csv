@@ -1,33 +1,33 @@
 song_id,title,artist,genre,youtube_url,split
-1,someone like you,Adele,POP SOUL,https://www.youtube.com/watch?v=hmfJNma0nXU&t=541s,Train
-2,uptown funk,Mark Ronson/Bruno Mars,POP funk-pop,https://www.youtube.com/watch?v=jzrsZpK4jx0&t=126s,Train
-3,back to black,Amy Winehouse,"SOUL R&B, neo-soul",https://www.youtube.com/watch?v=CTZ2Zri8RRE,Train
-4,cruel summer,Taylor Swift,POP (Electropop and Synth-pop),https://www.youtube.com/watch?v=c9vQe0xKX8c,Train
-5,shake it off,Taylor Swift,POP (dance-pop and uptempo pop),https://www.youtube.com/watch?v=uicRunpuDO0&t=69s,Train
-6,beat it,Michael Jackson," ROCK hard rock, dance-rock, funk rock",https://www.youtube.com/watch?v=wy8HLMIoSyI&t=443s,Train
-7,bohemian rhapsody,Queen,"ROCK progressive rock, hard rock",https://www.youtube.com/watch?v=qpzas_thZRM,Validation
-8,highway to hell,AC/DC,"ROCK Hard rock, blues rock",https://www.youtube.com/watch?v=a1xV0iLJbuI,Test
+1,someone_like_you,Adele,POP SOUL,https://www.youtube.com/watch?v=hmfJNma0nXU&t=541s,Train
+2,uptown_funk,Mark Ronson/Bruno Mars,POP funk-pop,https://www.youtube.com/watch?v=jzrsZpK4jx0&t=126s,Train
+3,back_to_black,Amy Winehouse,"SOUL R&B, neo-soul",https://www.youtube.com/watch?v=CTZ2Zri8RRE,Train
+4,cruel_summer,Taylor Swift,POP (Electropop and Synth-pop),https://www.youtube.com/watch?v=c9vQe0xKX8c,Train
+5,shake_it_off,Taylor Swift,POP (dance-pop and uptempo pop),https://www.youtube.com/watch?v=uicRunpuDO0&t=69s,Train
+6,beat_it,Michael Jackson," ROCK hard rock, dance-rock, funk rock",https://www.youtube.com/watch?v=wy8HLMIoSyI&t=443s,Train
+7,bohemian,Queen,"ROCK progressive rock, hard rock",https://www.youtube.com/watch?v=qpzas_thZRM,Validation
+8,highway_to_hell,AC/DC,"ROCK Hard rock, blues rock",https://www.youtube.com/watch?v=a1xV0iLJbuI,Test
 9,toxic,Britney Spears,"POP dance-pop, techno-pop",https://www.youtube.com/watch?v=cWxtEadS0BE&t=133s,Train
-10,chopin nocturne op. 9 no. 2,Frédéric Chopin,classical (Romantic-era piano solo),https://www.youtube.com/watch?v=MmkLYFEjRfk,Train
+10,chopin,Frédéric Chopin,classical (Romantic-era piano solo),https://www.youtube.com/watch?v=MmkLYFEjRfk,Train
 11,faded,Alan Walker,"melodic electro-house, downtempo EDM ",https://www.youtube.com/watch?v=sSOkoe8m5DU&t=96s,Train
 12,closer,The Chainsmoker/Halsey,EDM-pop,https://www.youtube.com/watch?v=sGpBNRCU9T0,Test
-13,empire state of mind,Jay-z / Alicia Keys,orchestral hip-hop anthem,https://www.youtube.com/watch?v=Qva_RW2FLUs,Train
-14,god's plan,Drake,"pop rap, trap",https://www.youtube.com/watch?v=g819-xKC1Sc&t=513s,Validation
-15,I will always love you,Whitney Houston,"SOUL, R&B",https://www.youtube.com/watch?v=Lw1jnwFVH8M,Validation
-16,fly me to the moon,Frank Sinatra,JAZZ,https://www.youtube.com/watch?v=Iz1d5PIVkGE&t=296s,Train
-17,"take me home, country roads",John Denver,"country, FOLK",https://www.youtube.com/watch?v=cLQAZP2-mhQ,Train
+13,empire_state,Jay-z / Alicia Keys,orchestral hip-hop anthem,https://www.youtube.com/watch?v=Qva_RW2FLUs,Train
+14,gods_plan,Drake,"pop rap, trap",https://www.youtube.com/watch?v=g819-xKC1Sc&t=513s,Validation
+15,i_will_always_love_you,Whitney Houston,"SOUL, R&B",https://www.youtube.com/watch?v=Lw1jnwFVH8M,Validation
+16,fly_me_to_the_moon,Frank Sinatra,JAZZ,https://www.youtube.com/watch?v=Iz1d5PIVkGE&t=296s,Train
+17,take_me_home_country_roads,John Denver,"country, FOLK",https://www.youtube.com/watch?v=cLQAZP2-mhQ,Train
 18,APT,Rose/Bruno Mars,"POP up-tempo pop, pop rock, pop-punk",https://www.youtube.com/watch?v=5TwUdICcBhw&t=181s,Validation
 19,dynamite,BTS,POP disco-pop,https://www.youtube.com/watch?v=diepCyZ3ZP8,Train
-20,Despacito,Luis Fonsi,"Latin pop, Reggaeton",https://www.youtube.com/watch?v=AjuVw-6_hYM&t=175s,Train
-21,Champagne Problems,Taylor Swift,"Ballad, indie-folk",https://www.youtube.com/watch?v=fBaZ8nT3gf4,Validation
-22,Heat Waves,Glass Animals ,"POP indie-pop, psychedelic pop",https://www.youtube.com/watch?v=RK8w5pkkj-8,Test
-23,Hips don't lie,Shakira/Wyclef Jean,"Latin pop, Reggaeton",https://www.youtube.com/watch?v=A96BsEIWSas&list=RDA96BsEIWSas&start_radio=1,Validation
-24,What a Wonderful World,Louis Armstrong,"JAZZ ballad, traditional pop",https://www.youtube.com/watch?v=gCN0-zDvrXU,Validation
-25,Lean on,"Major Lazer,DJ Snake",EDM,https://www.youtube.com/watch?v=2AUrmAy59Vk,Validation
-26,Cardigan,Taylor Swift,"Ballad, indie-folk",https://www.youtube.com/watch?v=CEbNmK5sc5I,Test
-27,la vie en rose,Louis Armstrong,JAZZ,https://www.youtube.com/watch?v=sNfAknrwj4M&list=RDsNfAknrwj4M&start_radio=1,Test
-28,Humble,Kendrick Lamar,"Hip-hop, trap",https://www.youtube.com/watch?v=P8yo1vGmPr0,Test
-29,Eine Klein Nachtmusik,Mozart,Classical,https://www.youtube.com/watch?v=oOFrLxRXqSU,Validation
-30,Waltz Op64 No2,Chopin,Classical,https://www.youtube.com/watch?v=XEdJqFkXh-Q,Test
-31,Mi gente,"J Balvin, Willy William","Latin pop, Reggaeton",https://www.youtube.com/watch?v=Erz92VJvY1c,Test
-32,Thinking out loud,Ed Sheeren,"blue-eyed soul, romantic ballad",https://www.youtube.com/watch?v=MqdOglatrJg,Test
+20,despacito,Luis Fonsi,"Latin pop, Reggaeton",https://www.youtube.com/watch?v=AjuVw-6_hYM&t=175s,Train
+21,champagne_problems,Taylor Swift,"Ballad, indie-folk",https://www.youtube.com/watch?v=fBaZ8nT3gf4,Train
+22,heat_waves,Glass Animals ,"POP indie-pop, psychedelic pop",https://www.youtube.com/watch?v=RK8w5pkkj-8,Test
+23,hips_dont_lie,Shakira/Wyclef Jean,"Latin pop, Reggaeton",https://www.youtube.com/watch?v=A96BsEIWSas&list=RDA96BsEIWSas&start_radio=1,Train
+24,what_a_wonderful_world,Louis Armstrong,"JAZZ ballad, traditional pop",https://www.youtube.com/watch?v=gCN0-zDvrXU,Validation
+25,lean_on,"Major Lazer,DJ Snake",EDM,https://www.youtube.com/watch?v=2AUrmAy59Vk,Train
+26,cardigan,Taylor Swift,"Ballad, indie-folk",https://www.youtube.com/watch?v=CEbNmK5sc5I,Test
+27,la_vie_en_rose,Louis Armstrong,JAZZ,https://www.youtube.com/watch?v=sNfAknrwj4M&list=RDsNfAknrwj4M&start_radio=1,Train
+28,Humble,Kendrick Lamar,"Hip-hop, trap",https://www.youtube.com/watch?v=P8yo1vGmPr0,Train
+29,Eine_Klein_Nachtmusik,Mozart,Classical,https://www.youtube.com/watch?v=oOFrLxRXqSU,Train
+30,Waltz_Op64_No2,Chopin,Classical,https://www.youtube.com/watch?v=XEdJqFkXh-Q,Train
+31,Mi_gente,"J Balvin, Willy William","Latin pop, Reggaeton",https://www.youtube.com/watch?v=Erz92VJvY1c,Train
+32,thinking_out_loud,Ed Sheeren,"blue-eyed soul, romantic ballad",https://www.youtube.com/watch?v=MqdOglatrJg,Test
