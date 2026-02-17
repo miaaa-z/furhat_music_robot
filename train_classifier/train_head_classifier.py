@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
@@ -53,6 +54,13 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
+
+# Baseline: DummyClassifier
+dummy = DummyClassifier(strategy='most_frequent', random_state=42)
+dummy.fit(X_train, y_train)
+dummy_val_acc = accuracy_score(y_val, dummy.predict(X_val))
+dummy_test_acc = accuracy_score(y_test, dummy.predict(X_test))
+print(f"Dummy Classifier (most_frequent) - Val Acc: {dummy_val_acc:.4f}, Test Acc: {dummy_test_acc:.4f}")
 
 # Step 6: Train Random Forest
 rf = RandomForestClassifier(
