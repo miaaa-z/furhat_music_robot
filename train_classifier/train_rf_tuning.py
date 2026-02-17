@@ -6,11 +6,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score
 
-# ---- Load data ----
 features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features.csv')
 metadata = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/annotations/metadata.csv')
 
-features['facial_expression'] = features['facial_expression'].str.strip()
+features['head_movement'] = features['head_movement'].str.strip()
 song_split_dict = {row['title']: row['split'] for _, row in metadata.iterrows()}
 features['split'] = features['song_name'].map(song_split_dict)
 
@@ -19,8 +18,8 @@ val_data = features[features['split'] == 'Validation'].copy()
 
 X_train = train_data[['tempo', 'energy', 'brightness']].values
 X_val = val_data[['tempo', 'energy', 'brightness']].values
-y_train = train_data['facial_expression'].values
-y_val = val_data['facial_expression'].values
+y_train = train_data['head_movement'].values
+y_val = val_data['head_movement'].values
 
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
