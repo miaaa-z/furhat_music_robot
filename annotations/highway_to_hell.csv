@@ -1,15 +1,15 @@
-start_time,end_time,duration,head movement,facial expression,intensity,label
-0,10,10,none,neutral,3,
-10,19,9,nod,neutral,2,
-19,52,33,shake,frown,2,
-52,72,20,nod,frown,3,
-72,106,34,sway,"frown, smile",3,
-106,114,8,shake,big smile,3,
-114,124,10,sway,"oh, frown",3,
-124,148,24,shake,"surprise, frown",3,
-148,163,15,nod,big smile,3,
-163,168,5,none,"surprise, frown",3,
-168,180,12,nod,frown,2,
-180,191,11,sway,frown,3,
-191,202,11,nod,frown,2,
-202,208,6,none,"smile, frown",3,
+start_time,end_time,duration,head movement,facial expression,intensity
+0,10,10,none,neutral,3
+10,19,9,nod,neutral,2
+19,52,33,shake,frown,2
+52,72,20,nod,frown,3
+72,106,34,sway,"frown, smile",3
+106,114,8,shake,big smile,3
+114,124,10,sway,"oh, frown",3
+124,148,24,shake,"surprise, frown",3
+148,163,15,nod,big smile,3
+163,168,5,none,"surprise, frown",3
+168,180,12,nod,frown,2
+180,191,11,sway,frown,3
+191,202,11,nod,frown,2
+202,208,6,none,"smile, frown",3

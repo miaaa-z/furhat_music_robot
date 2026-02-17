@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
@@ -27,6 +28,7 @@ print(f"Train:      {len(train_data)} segments")
 print(f"Validation: {len(val_data)} segments")
 print(f"Test:       {len(test_data)} segments")
 
+
 # Merge intensity classes function
 def merge_intensity(intensity):
     """
@@ -41,6 +43,7 @@ def merge_intensity(intensity):
         return 1
     else:
         return 2
+
 
 # Apply merging
 train_data_copy = train_data.copy()
@@ -66,8 +69,6 @@ y_train = train_data_copy['intensity_merged'].values
 y_val = val_data_copy['intensity_merged'].values
 y_test = test_data_copy['intensity_merged'].values
 
-print(f"\nX_train shape: {X_train.shape}")
-print(f"y_train shape: {y_train.shape}")
 
 # Step 5: Normalize
 scaler = StandardScaler()
@@ -75,12 +76,21 @@ X_train = scaler.fit_transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
+# Baseline: DummyClassifier
+dummy = DummyClassifier(strategy='most_frequent', random_state=42)
+dummy.fit(X_train, y_train)
+dummy_val_acc = accuracy_score(y_val, dummy.predict(X_val))
+dummy_test_acc = accuracy_score(y_test, dummy.predict(X_test))
+print(f"Dummy Classifier (most_frequent) - Val Acc: {dummy_val_acc:.4f}, Test Acc: {dummy_test_acc:.4f}")
+
+
 # Step 6: Train Random Forest
 rf = RandomForestClassifier(
-    n_estimators=100,          # Number of trees in the forest
-    max_depth=10,              # Maximum depth of each tree
-    min_samples_split=5,       # Minimum samples required to split a node
-    min_samples_leaf=2,        # Minimum samples required at leaf node
+    n_estimators=200,          # Number of trees in the forest
+    max_depth=None,              # Maximum depth of each tree
+    min_samples_split=2,       # Minimum samples required to split a node
+    min_samples_leaf=1,        # Minimum samples required at leaf node
+    max_features='sqrt',
     class_weight='balanced',   # Handle class imbalance
     random_state=42,           # For reproducibility
     n_jobs=-1                  # Use all CPU cores
