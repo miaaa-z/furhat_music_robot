@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import numpy as np
+from imblearn.over_sampling import SMOTE
 
 print("Training Intensity Classifier (Random Forest with Merged Classes)\n")
 
@@ -92,6 +93,17 @@ dummy_test_acc = accuracy_score(y_test, dummy.predict(X_test))
 print(f"Dummy Classifier (most_frequent) - Val Acc: {dummy_val_acc:.4f}, Test Acc: {dummy_test_acc:.4f}")
 
 
+# # Apply SMOTE (Synthetic Minority Over-sampling Technique) to balance training classes
+# # SMOTE generates more samples for minority classes (Low and High) to avoid predict only the majority class (Medium)
+
+sm = SMOTE(random_state=42, k_neighbors=3)  # k_neighbors=3 because high/low has few samples
+X_train_resampled, y_train_resampled = sm.fit_resample(X_train, y_train)
+
+unique, counts = np.unique(y_train_resampled, return_counts=True)
+print("\nClass distribution after SMOTE oversampling:")
+for label, count in zip(unique, counts):
+    print(f"  Class {label}: {count} samples")
+
 # Step 6: Train Random Forest
 rf = RandomForestClassifier(
     n_estimators=200,          # Number of trees in the forest
@@ -103,7 +115,7 @@ rf = RandomForestClassifier(
     random_state=42,           # For reproducibility
     n_jobs=-1                  # Use all CPU cores
 )
-rf.fit(X_train, y_train)
+rf.fit(X_train_resampled, y_train_resampled)
 print("Training complete\n")
 
 # Print feature importance
