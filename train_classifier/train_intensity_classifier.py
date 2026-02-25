@@ -8,7 +8,7 @@ import numpy as np
 print("Training Intensity Classifier (Random Forest with Merged Classes)\n")
 
 # Step 1-4: Load and prepare data
-features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features.csv')
+features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v2.csv')
 metadata = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/annotations/metadata.csv')
 
 print(f"Total segments: {len(features)}")
@@ -61,9 +61,17 @@ print("\nclass distribution (training set):")
 for label, count in zip(unique, counts):
     print(f"  Class {label}: {count} samples ({count/len(train_data_copy)*100:.1f}%)")
 
-X_train = train_data_copy[['tempo', 'energy', 'brightness']].values
-X_val = val_data_copy[['tempo', 'energy', 'brightness']].values
-X_test = test_data_copy[['tempo', 'energy', 'brightness']].values
+# split labels and features
+label_cols = ['song_name', 'start_time', 'end_time', 'duration',
+              'head_movement', 'facial_expression', 'intensity',
+              'intensity_merged', 'split']
+
+# these are all features
+feature_cols = [c for c in train_data_copy.columns if c not in label_cols]
+
+X_train = train_data_copy[feature_cols].values
+X_val = val_data_copy[feature_cols].values
+X_test = test_data_copy[feature_cols].values
 
 y_train = train_data_copy['intensity_merged'].values
 y_val = val_data_copy['intensity_merged'].values
@@ -100,7 +108,7 @@ print("Training complete\n")
 
 # Print feature importance
 print("Feature Importance:")
-feature_names = ['tempo', 'energy', 'brightness']
+feature_names = feature_cols
 importances = rf.feature_importances_
 for name, importance in zip(feature_names, importances):
     print(f"  {name}: {importance:.4f}")
