@@ -8,7 +8,7 @@ import numpy as np
 print("Training Head Movement Classifier (Random Forest) \n")
 
 # Step 1-2: Load and prepare data
-features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features.csv')
+features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v2.csv')
 metadata = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/annotations/metadata.csv')
 
 # Clean whitespace in head_movement column
@@ -41,9 +41,13 @@ for label, count in zip(unique, counts):
     print(f" {label:10s}:  {count:3d}   ({count/total*100:.1f}%)")
 
 # Step 4: Prepare features (X) and labels (y)
-X_train = train_data[['tempo', 'energy', 'brightness']].values
-X_val = val_data[['tempo', 'energy', 'brightness']].values
-X_test = test_data[['tempo', 'energy', 'brightness']].values
+label_cols = ['song_name', 'start_time', 'end_time', 'duration',
+              'head_movement', 'facial_expression', 'intensity', 'split']
+feature_cols = [c for c in train_data.columns if c not in label_cols]
+
+X_train = train_data[feature_cols].values
+X_val = val_data[feature_cols].values
+X_test = test_data[feature_cols].values
 
 y_train = train_data['head_movement'].values
 y_val = val_data['head_movement'].values
@@ -64,8 +68,8 @@ print(f"Dummy Classifier (most_frequent) - Val Acc: {dummy_val_acc:.4f}, Test Ac
 
 # Step 6: Train Random Forest
 rf = RandomForestClassifier(
-    n_estimators=100,
-    max_depth=10,
+    n_estimators=200,
+    max_depth=20,
     min_samples_split=5,
     min_samples_leaf=2,
     class_weight='balanced',
@@ -76,7 +80,7 @@ rf.fit(X_train, y_train)
 
 # Print feature importance
 print("Feature Importance:")
-feature_names = ['tempo', 'energy', 'brightness']
+feature_names = feature_cols
 importances = rf.feature_importances_
 for name, importance in zip(feature_names, importances):
     print(f"  {name}: {importance:.4f}")
