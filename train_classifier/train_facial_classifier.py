@@ -30,51 +30,32 @@ print(f"Validation: {len(val_data)} segments")
 print(f"Test:       {len(test_data)} segments")
 
 
-# 3: merge 27 classes into 9 groups
 def merge_facial_expression(expression):
     expression = expression.strip().lower()
 
-    # Group 1: angry — any expression containing anger
-    if 'angry' in expression:
-        return 'angry'
+    if 'angry' in expression or 'disgust' in expression:
+        return 'negative'
 
-    # Group 2: big smile — strong positive expressions
-    elif expression in ['big smile', 'big smile, close eyes', 'browraise, smile']:
+    elif 'big smile' in expression or ('browraise' in expression and 'smile' in expression):
         return 'big_smile'
 
-    # Group 3: surprise — raised brows, surprise, open mouth
-    elif expression in ['browraise', 'browraise, surprise', 'surprise', 'oh', 'oh face']:
+    elif 'browraise' in expression or 'surprise' in expression or 'oh' in expression:
         return 'surprise'
 
-    # Group 4: smile — mild positive expressions
-    elif expression in ['smile', 'close eyes', 'close eyes, smile',
-                        'narrow eyes, smile', 'smile, close eyes']:
-        return 'smile'
-
-    # Group 5: disgust
-    elif 'disgust' in expression:
-        return 'disgust'
-
-    # Group 6: frown — any expression containing frown or sadness
     elif 'frown' in expression or 'sad' in expression:
         return 'frown'
 
-    # Group 7: neutral
-    elif expression == 'neutral':
-        return 'neutral'
-
-    # Group 8: thoughtful
     elif 'thoughtful' in expression or 'confused' in expression:
         return 'thoughtful'
 
-    # Group 9: smile_frown — mixed/ambiguous expressions
-    elif 'smile' in expression and 'frown' in expression:
-        return 'smile_frown'
+    elif 'smile' in expression:
+        return 'smile'
 
-    # else: keep original if unmatched
+    elif 'neutral' in expression:
+        return 'neutral'
+
     else:
-        print(f"  [WARNING] Unmatched expression: '{expression}' → kept as-is")
-        return expression
+        return 'neutral'
 
 
 train_data['facial_merged'] = train_data['facial_expression'].apply(merge_facial_expression)
