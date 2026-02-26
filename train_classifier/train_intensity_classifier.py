@@ -118,6 +118,9 @@ rf = RandomForestClassifier(
 rf.fit(X_train_resampled, y_train_resampled)
 print("Training complete\n")
 
+y_train_pred = rf.predict(X_train)
+train_acc = accuracy_score(y_train, y_train_pred)
+
 # Print feature importance
 print("Feature Importance:")
 feature_names = feature_cols
@@ -155,21 +158,17 @@ print(confusion_matrix(y_test, y_test_pred))
 
 
 print("Final Results:")
+print(f"  Train Accuracy:      {train_acc:.4f}")
 print(f"  Validation Accuracy: {val_acc:.4f}")
 print(f"  Test Accuracy:       {test_acc:.4f}")
 print("\n")
 
-# Get probability predictions with song info
-print("Sample Predictions (first 5 validation samples):")
-val_probs = rf.predict_proba(X_val)[:5]
-val_sample_info = val_data_copy.head(5)
+# save classifier
+SAVE_MODEL = False
 
-for i, (true_label, pred_label, probs) in enumerate(zip(y_val[:5], y_val_pred[:5], val_probs)):
-    song_name = val_sample_info.iloc[i]['song_name']
-    start_time = val_sample_info.iloc[i]['start_time']
-    end_time = val_sample_info.iloc[i]['end_time']
-
-    print(f"\nSample {i + 1}: {song_name} ({start_time:.1f}s - {end_time:.1f}s)")
-    print(f"  True: {true_label} ({['Low', 'Medium', 'High'][true_label]})")
-    print(f"  Predicted: {pred_label} ({['Low', 'Medium', 'High'][pred_label]})")
-    print(f"  Probabilities - Low: {probs[0]:.2f}, Medium: {probs[1]:.2f}, High: {probs[2]:.2f}")
+if SAVE_MODEL:
+    import joblib, os
+    os.makedirs('models', exist_ok=True)
+    joblib.dump(rf,     'models/intensity_classifier.pkl')
+    joblib.dump(scaler, 'models/intensity_scaler.pkl')
+    print("Model saved!")

@@ -112,6 +112,9 @@ rf = RandomForestClassifier(
 rf.fit(X_train, y_train)
 print("Training complete\n")
 
+y_train_pred = rf.predict(X_train)
+train_acc = accuracy_score(y_train, y_train_pred)
+
 # Print top 10 most important features
 print("Top 10 Feature Importances:")
 importances = rf.feature_importances_
@@ -140,5 +143,17 @@ print("Confusion Matrix:")
 print(confusion_matrix(y_test, y_test_pred))
 
 print("\nFinal Results:")
+print(f"  Train Accuracy:      {train_acc:.4f}")
 print(f"  Dummy Baseline  — Val: {dummy_val_acc:.4f}, Test: {dummy_test_acc:.4f}")
 print(f"  Random Forest   — Val: {val_acc:.4f},  Test: {test_acc:.4f}")
+
+
+# save classifier
+SAVE_MODEL = False
+
+if SAVE_MODEL:
+    import joblib, os
+    os.makedirs('models', exist_ok=True)
+    joblib.dump(rf,     'models/facial_classifier.pkl')
+    joblib.dump(scaler, 'models/facial_scaler.pkl')
+    print("Model saved!")

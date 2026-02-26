@@ -85,6 +85,9 @@ importances = rf.feature_importances_
 for name, importance in zip(feature_names, importances):
     print(f"  {name}: {importance:.4f}")
 
+y_train_pred = rf.predict(X_train)
+train_acc = accuracy_score(y_train, y_train_pred)
+
 # Step 7: Evaluate on validation set
 print("Validation Results")
 y_val_pred = rf.predict(X_val)
@@ -121,5 +124,17 @@ for i, (true_label, pred_label, probs) in enumerate(zip(y_val[:5], y_val_pred[:5
 
 # Summary
 print("Final Results:")
+print(f"  Train Accuracy:      {train_acc:.4f}")
 print(f"  Validation Accuracy: {val_acc:.4f}")
 print(f"  Test Accuracy:       {test_acc:.4f}")
+
+# save model
+# only when SAVE_MODEL = True, the classifier will be saved
+SAVE_MODEL = False
+
+if SAVE_MODEL:
+    import joblib, os
+    os.makedirs('models', exist_ok=True)
+    joblib.dump(rf,     'models/head_classifier.pkl')
+    joblib.dump(scaler, 'models/head_scaler.pkl')
+    print("Model saved!")
