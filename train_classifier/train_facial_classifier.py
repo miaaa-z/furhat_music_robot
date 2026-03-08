@@ -8,7 +8,7 @@ import numpy as np
 print("Training Facial Expression Classifier (Random Forest with Merged Categories)\n")
 
 # 1: Load data
-features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v2.csv')
+features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v3.csv')
 metadata = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/annotations/metadata.csv')
 
 # Clean whitespace

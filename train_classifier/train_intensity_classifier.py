@@ -9,7 +9,7 @@ from imblearn.over_sampling import SMOTE
 print("Training Intensity Classifier (Random Forest with Merged Classes)\n")
 
 # Step 1-4: Load and prepare data
-features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v2.csv')
+features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v3.csv')
 metadata = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/annotations/metadata.csv')
 
 print(f"Total segments: {len(features)}")

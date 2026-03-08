@@ -8,7 +8,7 @@ import numpy as np
 print("Training Head Movement Classifier (Random Forest) \n")
 
 # Step 1-2: Load and prepare data
-features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v2.csv')
+features = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/features_v3.csv')
 metadata = pd.read_csv('/Users/miaaa/Desktop/music robot/furhat_music_robot/annotations/metadata.csv')
 
 # Clean whitespace in head_movement column
