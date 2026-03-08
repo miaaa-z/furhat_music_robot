@@ -6,7 +6,7 @@ import os
 
 annotations_folder = 'annotations'
 audio_folder = 'train'
-output_file = 'features_v2.csv'
+output_file = 'features_v3.csv'
 
 #  extract all features for one segment
 # Returns a flat dict of ~66 numbers

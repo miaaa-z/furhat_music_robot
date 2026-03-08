@@ -5,7 +5,7 @@ from furhat_realtime_api import AsyncFurhatClient
 from test_custom_behaviour import CustomBehaviorTester
 from behavior_definitions import categorize_tempo, categorize_energy, categorize_brightness, get_behavior
 
-AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/not_like_us.wav"
+AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/beat_it.wav"
 WINDOW_SIZE = 5.0
 
 
@@ -57,7 +57,7 @@ async def main():
     print(f"Analysis complete! {len(windows_data)} windows ready.\n")
 
     # play music
-    music_url = "https://drive.google.com/uc?export=download&id=1w3sQMlZlouiXkAgK8QGhSenurtpjzWaI"
+    music_url = "https://drive.google.com/uc?export=download&id=1lBeTwrHgxXo982SBbhQBcF_zHU84oYEs"
 
     try:
         await furhat.request_speak_audio(
