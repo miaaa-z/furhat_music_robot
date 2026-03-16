@@ -3,7 +3,7 @@ import numpy as np
 import asyncio
 from furhat_realtime_api import AsyncFurhatClient
 
-AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/faded.wav"
+AUDIO_PATH = "/train/faded.wav"
 MAX_DURATION = 60   # test the first 60 s
 
 async def strategy_A(furhat, beat_times, tempo, start_time):

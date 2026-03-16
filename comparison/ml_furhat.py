@@ -4,6 +4,8 @@ import asyncio
 import joblib
 from furhat_realtime_api import AsyncFurhatClient
 from test_custom_behaviour import CustomBehaviorTester
+from center_down_2 import strategy_A as do_nod_strategy_a
+
 
 AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
 # AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/zoo.wav"
@@ -201,18 +203,7 @@ async def main():
 
         # head
         if head == 'nod':
-            async def do_nod_beats(beat_list, si):
-                await furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=False)
-                for bt in beat_list:
-                    elapsed_now = asyncio.get_event_loop().time() - si
-                    wait = bt - elapsed_now
-                    if wait > 0:
-                        await asyncio.sleep(wait)
-                    await furhat.request_face_headpose(yaw=0, pitch=10, roll=0, relative=True)
-                    await asyncio.sleep(0.1)
-                    await furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=False)
-
-            asyncio.create_task(do_nod_beats(beats, start_time))
+            asyncio.create_task(do_nod_strategy_a(furhat, beats, global_tempo, start_time))
 
         elif head == 'sway':
             times = max(1, int(WINDOW_SIZE / 1.5))

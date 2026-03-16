@@ -3,10 +3,11 @@ import numpy as np
 import asyncio
 from furhat_realtime_api import AsyncFurhatClient
 from test_custom_behaviour import CustomBehaviorTester
+from center_down_2 import strategy_A as do_nod_strategy_a
 
 
 AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
-WINDOW_SIZE = 1.0
+WINDOW_SIZE = 1.0   # same as ML system
 
 
 def categorize_tempo(bpm: float) -> str:
@@ -16,7 +17,6 @@ def categorize_tempo(bpm: float) -> str:
         return 'moderate'
     else:
         return 'fast'
-
 
 def categorize_energy(energy: float) -> str:
     if energy < 0.10:
@@ -99,7 +99,7 @@ async def main():
     await furhat.connect()
     await custom.setup()
 
-    #Audio analysis
+    # Audio analysis
     print("Analyzing audio...")
     y, sr = librosa.load(AUDIO_PATH)
     duration = librosa.get_duration(y=y, sr=sr)
@@ -116,8 +116,7 @@ async def main():
           f"Brightness: {categorize_brightness(brightness_hz)} | "
           f"Windows: {int(duration / WINDOW_SIZE)}\n")
 
-    # Pre-analyse all windows
-    print("Pre-analyzing windows...")
+    print("Pre-analyzing windows.")
     windows_data = []
 
     for start in np.arange(0, duration, WINDOW_SIZE):
@@ -191,7 +190,7 @@ async def main():
               f"head:{head:6s} | facial:{facial}")
 
         # Facial expression
-        # Only update when expression changes; hold for same windows
+        # Only update when expression changes; hold for identical windows
         if facial != current_facial:
             expr_duration = WINDOW_SIZE
             for j in range(i + 1, len(windows_data)):
@@ -206,18 +205,7 @@ async def main():
 
         # Head movement
         if head == 'nod':
-            # Beat-synchronised nodding (same as ML system)
-            async def do_nod_beats(beat_list, si):
-                await furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=False)
-                for bt in beat_list:
-                    elapsed_now = asyncio.get_event_loop().time() - si
-                    wait = bt - elapsed_now
-                    if wait > 0:
-                        await asyncio.sleep(wait)
-                    await furhat.request_face_headpose(yaw=0, pitch=10, roll=0, relative=True)
-                    await asyncio.sleep(0.1)
-                    await furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=False)
-            asyncio.create_task(do_nod_beats(beats, start_time))
+            asyncio.create_task(do_nod_strategy_a(furhat, beats, global_tempo, start_time))
 
         elif head == 'sway':
             times = max(1, int(WINDOW_SIZE / 1.5))
@@ -227,9 +215,8 @@ async def main():
             times = max(1, int(WINDOW_SIZE / 1.0))
             asyncio.create_task(custom.head_shake_fast(times=times, intensity=intensity))
 
-        # head == 'none': do nothing (robot stays still)
+        # head == 'none'
 
-    # Wrap-up
     remaining = duration - (asyncio.get_event_loop().time() - start_time)
     if remaining > 0:
         await asyncio.sleep(remaining)
@@ -242,3 +229,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
