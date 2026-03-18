@@ -7,11 +7,11 @@ from test_custom_behaviour import CustomBehaviorTester
 from center_down_2 import strategy_A as do_nod_strategy_a
 
 
-AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
-# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/zoo.wav"
+# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
+AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/zoo.wav"
 # AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/beat_it.wav"
 MODELS_DIR = "/Users/miaaa/Desktop/music robot/furhat_music_robot/models"
-WINDOW_SIZE = 1.0  # same as traning
+WINDOW_SIZE = 2.0
 
 
 print("Loading models...")
@@ -91,6 +91,7 @@ def predict_facial(feature_dict):
             pass
     return best_cls  # 'smile', 'big_smile', 'frown', 'neutral'
 
+
 async def apply_facial_expression(furhat, expression, intensity=1.0, duration=1.0):
     gesture_map = {
         'big_smile': 'BigSmile',
@@ -104,17 +105,15 @@ async def apply_facial_expression(furhat, expression, intensity=1.0, duration=1.
     else:
         await furhat.request_gesture_start(name=gesture, intensity=intensity, duration=duration, wait=False)
 
+
 async def main():
-    # custom = CustomBehaviorTester()
-    # await custom.setup()
-    # furhat = custom.furhat
     furhat = AsyncFurhatClient("127.0.0.1")
     custom = CustomBehaviorTester()
 
     await furhat.connect()
     await custom.setup()
 
-    # analyze the song
+    # Analyze the song
     print("Analyzing audio...")
     y, sr = librosa.load(AUDIO_PATH)
     duration = librosa.get_duration(y=y, sr=sr)
@@ -132,41 +131,35 @@ async def main():
         start_sample = int(start * sr)
         end_sample = int((start + WINDOW_SIZE) * sr)
         y_window = y[start_sample:end_sample]
-        # if len(y_window) < sr * 0.5:
-        #     break
 
         feats = extract_features(y_window, sr)
         head_pred = predict_head(feats)
         facial_pred = predict_facial(feats)
 
-        # Get the beats in the window for nodding
         window_beats = beat_times[(beat_times >= start) & (beat_times < start + WINDOW_SIZE)]
 
-        # intensity
         rms_val = feats['rms_mean']
         intensity = 1.0 if rms_val < 0.10 else 1.3 if rms_val < 0.20 else 1.5
 
         windows_data.append({
-            'start':        start,
-            'head':         head_pred,
-            'facial':       facial_pred,
-            'beats':        window_beats,
-            'intensity':    intensity,
+            'start':     start,
+            'head':      head_pred,
+            'facial':    facial_pred,
+            'beats':     window_beats,
+            'intensity': intensity,
         })
-       # print(f"  {start:5.1f}s → head:{head_pred:6s} | facial:{facial_pred}")
 
     print(f"\nAnalysis done! {len(windows_data)} windows ready.\n")
 
     # Play the music
     # fortnight
-    music_url = "https://drive.google.com/uc?export=download&id=1Vi9Nu_9GLnwk-SKvgzcWAKwxPjHgDXGX"
+    # music_url = "https://drive.google.com/uc?export=download&id=1Vi9Nu_9GLnwk-SKvgzcWAKwxPjHgDXGX"
     # zoo
-    # music_url = "https://drive.google.com/uc?export=download&id=1GDjkRJKUhaMbDrWWpoVr_TaAYFmZMAs3"
-    #beat it
+    music_url = "https://drive.google.com/uc?export=download&id=1GDjkRJKUhaMbDrWWpoVr_TaAYFmZMAs3"
+    # beat it
     # music_url = "https://drive.google.com/uc?export=download&id=1lBeTwrHgxXo982SBbhQBcF_zHU84oYEs"
     try:
         await furhat.request_speak_audio(url=music_url, wait=False, abort=False, lipsync=False)
-        # await asyncio.sleep(0.3)
     except Exception as e:
         print(f"Audio error: {e}")
         await furhat.disconnect()
@@ -175,6 +168,7 @@ async def main():
 
     start_time = asyncio.get_event_loop().time()
     current_facial = None
+    current_head_task = None
 
     for i, window in enumerate(windows_data):
         elapsed = asyncio.get_event_loop().time() - start_time
@@ -190,7 +184,19 @@ async def main():
         actual = asyncio.get_event_loop().time() - start_time
         print(f"{actual:5.1f}s | head:{head:6s} | facial:{facial}")
 
-        # 表情变化时，往后数连续几秒是同一个表情，设置对应duration
+        # Cancel or wait for previous head task, then always reset head to center
+        if current_head_task is not None:
+            if not current_head_task.done():
+                current_head_task.cancel()
+                try:
+                    await current_head_task
+                except asyncio.CancelledError:
+                    pass
+            # reset regardless of whether task was cancelled or finished naturally
+            await furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=False)
+            current_head_task = None
+
+        # Facial expression (only update when expression changes)
         if facial != current_facial:
             expr_duration = WINDOW_SIZE
             for j in range(i + 1, len(windows_data)):
@@ -201,17 +207,22 @@ async def main():
             asyncio.create_task(apply_facial_expression(furhat, facial, intensity, expr_duration))
             current_facial = facial
 
-        # head
+        # Head movement
         if head == 'nod':
-            asyncio.create_task(do_nod_strategy_a(furhat, beats, global_tempo, start_time))
-
+            current_head_task = asyncio.create_task(
+                do_nod_strategy_a(furhat, beats, global_tempo, start_time)
+            )
         elif head == 'sway':
             times = max(1, int(WINDOW_SIZE / 1.5))
-            asyncio.create_task(custom.head_sway(times=times, intensity=intensity))
-
+            current_head_task = asyncio.create_task(
+                custom.head_sway(times=times, intensity=intensity)
+            )
         elif head == 'shake':
             times = max(1, int(WINDOW_SIZE / 1.0))
-            asyncio.create_task(custom.head_shake_fast(times=times, intensity=intensity))
+            current_head_task = asyncio.create_task(
+                custom.head_shake_fast(times=times, intensity=intensity)
+            )
+        # head == 'none': current_head_task stays None
 
     remaining = duration - (asyncio.get_event_loop().time() - start_time)
     if remaining > 0:
