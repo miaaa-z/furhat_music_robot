@@ -5,9 +5,10 @@ from furhat_realtime_api import AsyncFurhatClient
 from test_custom_behaviour import CustomBehaviorTester
 from center_down_2 import strategy_A as do_nod_strategy_a
 
-
-AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
-WINDOW_SIZE = 1.0   # same as ML system
+AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/zoo.wav"
+# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
+# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/beat_it.wav"
+WINDOW_SIZE = 2.0
 
 
 def categorize_tempo(bpm: float) -> str:
@@ -117,6 +118,8 @@ async def main():
           f"Windows: {int(duration / WINDOW_SIZE)}\n")
 
     print("Pre-analyzing windows.")
+
+    nod_task = None
     windows_data = []
 
     for start in np.arange(0, duration, WINDOW_SIZE):
@@ -155,9 +158,9 @@ async def main():
 
     # Play music
     # fortnight
-    music_url = "https://drive.google.com/uc?export=download&id=1Vi9Nu_9GLnwk-SKvgzcWAKwxPjHgDXGX"
+    # music_url = "https://drive.google.com/uc?export=download&id=1Vi9Nu_9GLnwk-SKvgzcWAKwxPjHgDXGX"
     # zoo
-    # music_url = "https://drive.google.com/uc?export=download&id=1GDjkRJKUhaMbDrWWpoVr_TaAYFmZMAs3"
+    music_url = "https://drive.google.com/uc?export=download&id=1GDjkRJKUhaMbDrWWpoVr_TaAYFmZMAs3"
     # beat it
     # music_url = "https://drive.google.com/uc?export=download&id=1lBeTwrHgxXo982SBbhQBcF_zHU84oYEs"
 
@@ -205,7 +208,11 @@ async def main():
 
         # Head movement
         if head == 'nod':
-            asyncio.create_task(do_nod_strategy_a(furhat, beats, global_tempo, start_time))
+            if nod_task is not None and not nod_task.done():
+                nod_task.cancel()  # cancel the last one (last one is not finished)
+            nod_task = asyncio.create_task(
+                do_nod_strategy_a(furhat, beats, global_tempo, start_time)
+            )
 
         elif head == 'sway':
             times = max(1, int(WINDOW_SIZE / 1.5))
