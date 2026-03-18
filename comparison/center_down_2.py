@@ -3,7 +3,7 @@ import numpy as np
 import asyncio
 from furhat_realtime_api import AsyncFurhatClient
 
-AUDIO_PATH = "/train/faded.wav"
+AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
 MAX_DURATION = 60   # test the first 60 s
 
 async def strategy_A(furhat, beat_times, tempo, start_time):
@@ -11,7 +11,7 @@ async def strategy_A(furhat, beat_times, tempo, start_time):
     down → middle → up → middle（4/4）
     """
     beat_duration = 60.0 / tempo
-    measure_starts = beat_times[::4]
+    measure_starts = beat_times[::4][:1]
 
     # go to center first
     await furhat.request_face_headpose(yaw=0, pitch=0, roll=0, relative=False)
@@ -108,7 +108,7 @@ async def main():
     print(f"Testing Strategy {STRATEGY}\n")
 
     # play the song
-    music_url = "https://drive.google.com/uc?export=download&id=18dhwLGYrc_pLfngKxb0eNEbkGl6xTLa0"
+    music_url = "https://drive.google.com/uc?export=download&id=1Vi9Nu_9GLnwk-SKvgzcWAKwxPjHgDXGX"
     await furhat.request_speak_audio(
         url=music_url,
         wait=False,
