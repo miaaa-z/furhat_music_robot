@@ -6,13 +6,13 @@ from furhat_realtime_api import AsyncFurhatClient
 from test_custom_behaviour import CustomBehaviorTester
 from center_down_2 import strategy_A as do_nod_strategy_a
 
+AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/cardigan.wav"
+# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/closer.wav"
+# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/highway_to_hell.wav"
 
-# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/fortnight.wav"
-AUDIO_PATH = "/Users/miaaa/Desktop/music robot/test/zoo.wav"
-# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/beat_it.wav"
 MODELS_DIR = "/Users/miaaa/Desktop/music robot/furhat_music_robot/models"
-WINDOW_SIZE = 2.0
 
+WINDOW_SIZE = 2.0
 
 print("Loading models...")
 head_rf = joblib.load(f"{MODELS_DIR}/head_classifier.pkl")
@@ -152,12 +152,12 @@ async def main():
     print(f"\nAnalysis done! {len(windows_data)} windows ready.\n")
 
     # Play the music
-    # fortnight
-    # music_url = "https://drive.google.com/uc?export=download&id=1Vi9Nu_9GLnwk-SKvgzcWAKwxPjHgDXGX"
-    # zoo
-    music_url = "https://drive.google.com/uc?export=download&id=1GDjkRJKUhaMbDrWWpoVr_TaAYFmZMAs3"
-    # beat it
-    # music_url = "https://drive.google.com/uc?export=download&id=1lBeTwrHgxXo982SBbhQBcF_zHU84oYEs"
+    # cardigan
+    music_url = "https://drive.google.com/uc?export=download&id=1qalHZhDBCWYTo8pTI38jsTGExivpcPtE"
+    # closer
+    # music_url = "https://drive.google.com/uc?export=download&id=1cFggXL3JWij6Sa1p1IzEv-X9eKwLOean"
+    # highway to hell
+    # music_url = "https://drive.google.com/uc?export=download&id=1Szo3Q5jWBJ3P9jHhWskVAq7lkuICl7ox"
     try:
         await furhat.request_speak_audio(url=music_url, wait=False, abort=False, lipsync=False)
     except Exception as e:
