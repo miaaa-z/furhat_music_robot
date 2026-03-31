@@ -172,3 +172,17 @@ if SAVE_MODEL:
     joblib.dump(rf,     'models/intensity_classifier.pkl')
     joblib.dump(scaler, 'models/intensity_scaler.pkl')
     print("Model saved!")
+
+
+def rule_based_intensity(rms_mean):
+    if rms_mean < 0.10:
+        return 0  # Low
+    elif rms_mean < 0.20:
+        return 1  # Medium
+    else:
+        return 2  # High
+
+y_rule = test_data_copy['rms_mean'].apply(rule_based_intensity).values
+rule_acc = accuracy_score(y_test, y_rule)
+print(f"Rule-based Accuracy: {rule_acc:.4f}")
+print(classification_report(y_test, y_rule, target_names=['Low', 'Medium', 'High']))
