@@ -6,13 +6,13 @@ from furhat_realtime_api import AsyncFurhatClient
 from test_custom_behaviour import CustomBehaviorTester
 from center_down_2 import strategy_A as do_nod_strategy_a
 
-AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/cardigan.wav"
+# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/cardigan.wav"
 # AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/closer.wav"
-# AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/highway_to_hell.wav"
+AUDIO_PATH = "/Users/miaaa/Desktop/music robot/furhat_music_robot/train/highway_to_hell.wav"
 
 MODELS_DIR = "/Users/miaaa/Desktop/music robot/furhat_music_robot/models"
 
-WINDOW_SIZE = 2.0
+WINDOW_SIZE = 5.0
 
 print("Loading models...")
 head_rf = joblib.load(f"{MODELS_DIR}/head_classifier.pkl")
@@ -138,26 +138,22 @@ async def main():
 
         window_beats = beat_times[(beat_times >= start) & (beat_times < start + WINDOW_SIZE)]
 
-        rms_val = feats['rms_mean']
-        intensity = 1.0 if rms_val < 0.10 else 1.3 if rms_val < 0.20 else 1.5
-
         windows_data.append({
             'start':     start,
             'head':      head_pred,
             'facial':    facial_pred,
-            'beats':     window_beats,
-            'intensity': intensity,
+            'beats':     window_beats
         })
 
     print(f"\nAnalysis done! {len(windows_data)} windows ready.\n")
 
     # Play the music
     # cardigan
-    music_url = "https://drive.google.com/uc?export=download&id=1qalHZhDBCWYTo8pTI38jsTGExivpcPtE"
+    # music_url = "https://drive.google.com/uc?export=download&id=1qalHZhDBCWYTo8pTI38jsTGExivpcPtE"
     # closer
     # music_url = "https://drive.google.com/uc?export=download&id=1cFggXL3JWij6Sa1p1IzEv-X9eKwLOean"
     # highway to hell
-    # music_url = "https://drive.google.com/uc?export=download&id=1Szo3Q5jWBJ3P9jHhWskVAq7lkuICl7ox"
+    music_url = "https://drive.google.com/uc?export=download&id=1Szo3Q5jWBJ3P9jHhWskVAq7lkuICl7ox"
     try:
         await furhat.request_speak_audio(url=music_url, wait=False, abort=False, lipsync=False)
     except Exception as e:
@@ -204,7 +200,7 @@ async def main():
                     expr_duration += WINDOW_SIZE
                 else:
                     break
-            asyncio.create_task(apply_facial_expression(furhat, facial, intensity, expr_duration))
+            asyncio.create_task(apply_facial_expression(furhat, facial, 1.0, expr_duration))
             current_facial = facial
 
         # Head movement
